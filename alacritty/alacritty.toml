@@ -1,0 +1,12 @@
+[window]
+option_as_alt = "OnlyLeft"
+
+[[keyboard.bindings]]
+key = "Return"
+mods = "Shift"
+chars = "\u001B\r"
+
+[[keyboard.bindings]]
+key = "Period"
+mods = "Control"
+chars = "\u001B[46;5u"
