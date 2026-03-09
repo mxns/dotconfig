@@ -76,6 +76,20 @@
   (define-key input-decode-map "\e[27;7;32~" (kbd "C-M-SPC")))
 (add-hook 'tty-setup-hook #'mxns/setup-terminal-keys)
 
+;; macOS clipboard integration in terminal mode (works inside tmux)
+(when (and (not (display-graphic-p))
+           (eq system-type 'darwin))
+  (defun mxns/pbcopy (text &optional _push)
+    (let ((process-connection-type nil))
+      (let ((proc (start-process "pbcopy" nil "pbcopy")))
+        (process-send-string proc text)
+        (process-send-eof proc))))
+  (defun mxns/pbpaste ()
+    (let ((text (shell-command-to-string "pbpaste")))
+      (unless (string= text "") text)))
+  (setq interprogram-cut-function #'mxns/pbcopy)
+  (setq interprogram-paste-function #'mxns/pbpaste))
+
 
 (let ((aux-dir (expand-file-name "aux/" user-emacs-directory)))
   (when (>= emacs-major-version 28)
