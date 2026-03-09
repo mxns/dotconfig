@@ -7,7 +7,9 @@ emacs/history
 emacs/projects
 emacs/recentf
 emacs/share
+emacs/transient
 emacs/tree-sitter
+emacs/vimish-fold
 gcloud
 gh
 git
