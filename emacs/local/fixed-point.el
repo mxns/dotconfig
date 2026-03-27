@@ -1,8 +1,11 @@
-;;; init-fixed-point.el --- Fixed-point navigation mode -*- lexical-binding: t -*-
+;;; fixed-point.el --- Fixed-point navigation mode -*- lexical-binding: t -*-
+
+;; Version: 0.1
+;; Package-Requires: ((emacs "28.1"))
 
 ;;; Commentary:
-;;; Minor mode that keeps the cursor at a fixed screen position.
-;;; Navigation commands scroll the buffer instead of moving the cursor.
+;; Minor mode that keeps the cursor at a fixed screen position.
+;; Navigation commands scroll the buffer instead of moving the cursor.
 
 ;;; Code:
 
@@ -141,6 +144,6 @@ down-list, etc.) also keep the cursor at its current screen line."
     (remove-hook 'pre-command-hook #'mxns/fixed-point--save t)
     (remove-hook 'post-command-hook #'mxns/fixed-point--restore t)))
 
-(global-set-key (kbd "C-c n") #'mxns/fixed-point-mode)
+(provide 'fixed-point)
 
-;;; init-fixed-point.el ends here
+;;; fixed-point.el ends here

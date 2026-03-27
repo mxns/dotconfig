@@ -61,7 +61,11 @@
 (when (file-exists-p custom-file)
   (load custom-file 'noerror 'nomessage))
 ;; (load (expand-file-name "init-nav" user-emacs-directory))
-(load (expand-file-name "init-fixed-point" user-emacs-directory))
+(use-package fixed-point
+  :ensure nil
+  :bind (("C-c n" . mxns/fixed-point-mode)
+         ("C-v"   . mxns/fixed-point-scroll-up)
+         ("M-v"   . mxns/fixed-point-scroll-down)))
 (load (expand-file-name "init-neotree" user-emacs-directory))
 (load (expand-file-name "init-sql-client" user-emacs-directory))
 (load (expand-file-name "init-eglot" user-emacs-directory))
