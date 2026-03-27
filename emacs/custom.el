@@ -14,7 +14,7 @@
  '(package-selected-packages
    '(apheleia avy breadcrumb company consult-eglot delight eglot
               eglot-java eldoc-box elfeed embark-consult ess flycheck
-              goggles log4j-mode magit marginalia markdown-mode
+              goggles log4j-mode magit marginalia markdown-mode markup
               neotree orderless rg terraform-mode transpose-frame
               treesit-auto undo-fu-session vertico vimish-fold vundo
               yaml-mode yasnippet))

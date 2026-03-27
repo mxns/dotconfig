@@ -432,6 +432,7 @@ With universal argument ARG, use current configuration."
   :demand t
   :bind-keymap
   ("C-x p" . mxns/project-prefix-map)
+  ("C-c p" . mxns/project-prefix-map)
   :config
   (keymap-set prosecco-mode-map "C-x p" mxns/project-prefix-map)
   (prosecco-mode 1))
@@ -455,10 +456,15 @@ With universal argument ARG, use current configuration."
 
 (use-package treesit-auto
   :functions
+  treesit-auto-add-to-auto-mode-alist
   global-treesit-auto-mode
   :custom
   (treesit-auto-install 'prompt)
   :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  ;; treesit-auto has a bug where some recipes (e.g. PHP) have a nil regexp,
+  ;; which causes "wrong-type-argument stringp nil" for every file opened.
+  (setq auto-mode-alist (seq-remove (lambda (x) (null (car x))) auto-mode-alist))
   (global-treesit-auto-mode))
 
 
@@ -527,6 +533,10 @@ With universal argument ARG, use current configuration."
   ;; Format on save is annoying, use apheleia-format-buffer manually instead
   (apheleia-global-mode -1))
 
+
+(use-package ess
+  :mode (("\\.R\\'" . R-mode))
+  :commands R)
 
 ;;; init.el ends here
 (put 'dired-find-alternate-file 'disabled nil)
