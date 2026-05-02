@@ -12,12 +12,13 @@
      ("Raising an Agent" "https://ampcode.com/podcast.rss" nil nil nil)))
  '(nxml-child-indent 4)
  '(package-selected-packages
-   '(apheleia avy breadcrumb company consult-eglot delight eglot
-              eglot-java eldoc-box elfeed embark-consult ess flycheck
-              goggles log4j-mode magit marginalia markdown-mode markup
-              neotree orderless rg terraform-mode transpose-frame
-              treesit-auto undo-fu-session vertico vimish-fold vundo
-              yaml-mode yasnippet))
+   '(apheleia avy breadcrumb company consult-dir consult-eglot delight
+              dired-hist eglot eglot-java eldoc-box elfeed
+              embark-consult ess flycheck goggles log4j-mode magit
+              marginalia markdown-mode markup neotree orderless rg
+              terraform-mode transpose-frame treesit-auto
+              undo-fu-session vertico vimish-fold vundo yaml-mode
+              yasnippet))
  '(safe-local-variable-values nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

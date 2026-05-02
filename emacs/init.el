@@ -351,21 +351,20 @@ With universal argument ARG, use current configuration."
 (use-package embark
   :bind (("C-." . embark-act)
          :map minibuffer-local-map
-         ("C-e C-c" . embark-collect)
-         ("C-e C-e" . embark-export)))
+         ("C-; c" . embark-collect)
+         ("C-; e" . embark-export)))
 
 
 (use-package embark-consult
-  :ensure t)
+  :after (embark consult)
+  :ensure t
+  :hook (embark-collect-mode . consult-preview-at-point-mode))
 
 
 (use-package consult
   :ensure-system-package fd
   :bind
-  (("C-c r" . consult-buffer)
-   ("C-<tab>" . consult-buffer)
-   :map vertico-map
-   ("C-<tab>". vertico-next))
+  (("C-c r" . consult-buffer))
   :init
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref)
@@ -373,6 +372,14 @@ With universal argument ARG, use current configuration."
   (require 'consult-xref)
   :hook
   (completion-list-mode . consult-preview-at-point-mode))
+
+
+(use-package consult-dir
+  :after consult
+  :bind (("C-c d" . consult-dir)
+         :map minibuffer-local-completion-map
+         ("C-c d" . consult-dir)
+         ("C-c j" . consult-dir-jump-file)))
 
 
 (use-package marginalia
@@ -546,3 +553,11 @@ With universal argument ARG, use current configuration."
 ;;; init.el ends here
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'scroll-left 'disabled nil)
+
+
+(use-package markdown-mode
+  :ensure t
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "/opt/homebrew/bin/pandoc")
+  :bind (:map markdown-mode-map
+              ("C-c C-e" . markdown-do)))
