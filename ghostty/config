@@ -1,0 +1,4 @@
+macos-option-as-alt = left
+
+keybind = shift+enter=text:\x1b\r
+keybind = ctrl+period=text:\x1b[46;5u
