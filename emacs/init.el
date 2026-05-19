@@ -72,6 +72,7 @@
 (xterm-mouse-mode 1)
 (mouse-wheel-mode 1)
 
+
 ;; Decode modifyOtherKeys C-M- sequences (\e[27;7;<keycode>~) sent by Alacritty/tmux
 (defun mxns/setup-terminal-keys ()
   (dolist (ch (string-to-list "abcdefghijklmnopqrstuvwxyz"))
@@ -149,12 +150,31 @@ With universal argument ARG, use current configuration."
         (ansi-color-apply-on-region (point-min) (point-max))))))
 
 
+(defun mxns/magit-set-untracked-files ()
+  "Set `magit-status-show-untracked-files' using completion."
+  (interactive)
+  (let* ((choices '(("Hide untracked files" . nil)
+                    ("Normal untracked files" . t)
+                    ("Show all untracked files" . all)))
+         (choice
+          (completing-read
+           "magit-status-show-untracked-files: "
+           choices
+           nil t)))
+    (setq magit-status-show-untracked-files
+          (cdr (assoc choice choices)))
+    (message "magit-status-show-untracked-files = %S"
+             magit-status-show-untracked-files)
+    (magit-refresh-all)))
+
+
 (defvar mxns/magit-prefix-map
   (let ((map (make-sparse-keymap)))
     (define-key map "m" 'magit-project-status)
     (define-key map "d" 'magit-diff-buffer-file)
     (define-key map "s" 'magit-file-stage)
     (define-key map "l" 'magit-log)
+    (define-key map "u" 'mxns/magit-set-untracked-files)
     map)
   "Keymap for magit commands.")
 
@@ -163,6 +183,7 @@ With universal argument ARG, use current configuration."
     "d" "Diff"
     "s" "Stage"
     "l" "Log"
+    "u" "Toggle show untracked"
     )
 
 
@@ -505,6 +526,8 @@ With universal argument ARG, use current configuration."
 ;;   (json-ts-mode . hs-minor-mode)
 ;;   (json-ts-mode . electric-pair-mode))
 
+(add-to-list 'auto-mode-alist '("\\.json\\.j2\\'" . json-ts-mode))
+
 
 (use-package typescript-ts-mode
   :delight
@@ -549,6 +572,29 @@ With universal argument ARG, use current configuration."
 (use-package ess
   :mode (("\\.R\\'" . R-mode))
   :commands R)
+
+
+(use-package htmlize
+  :ensure t)
+
+
+(use-package org
+  :ensure nil
+  :mode ("\\.org\\'" . org-mode)
+  :bind (:map org-mode-map
+              ("C-c '" . org-edit-special))
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (R . t)
+     (shell . t)))
+  (setq org-confirm-babel-evaluate nil
+        org-src-fontify-natively t
+        org-src-tab-acts-natively t
+        org-src-preserve-indentation t
+        org-src-window-setup 'current-window
+        org-edit-src-content-indentation 0))
 
 ;;; init.el ends here
 (put 'dired-find-alternate-file 'disabled nil)
