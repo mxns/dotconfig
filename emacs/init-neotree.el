@@ -9,10 +9,14 @@
 
 (defvar mxns/neotree-prefix-map
   (let ((map (make-sparse-keymap)))
-    (define-key map "T" 'neotree-project-root-toggle)
-    (define-key map "t" 'neotree-project-collapse-others)
-    (define-key map "g" 'neotree-increase-width)
-    (define-key map "r" 'neotree-reset-width)
+    (define-key map "T" 'mxns/neotree-project-root)
+    (define-key map "g" 'mxns/neotree-increase-width)
+    (define-key map "r" 'mxns/neotree-reset-width)
+    (define-key map "t" 'neotree-toggle)
+    (define-key map "f" 'neotree-find)
+    (define-key map "v" 'neotree-enter-vertical-split)
+    (define-key map "h" 'neotree-enter-horizontal-split)
+    (define-key map "c" 'neotree-copy-filepath-to-yank-ring)
     map)
   "Keymap for neotree commands.")
 
@@ -32,7 +36,7 @@
   (setq neo-smart-open t)
   (setq neo-window-width 30)
 
-  (defun neotree-project-root ()
+  (defun mxns/neotree-project-root ()
     "Open neotree at the project root and find current file."
     (interactive)
     (let* ((project-root (if-let ((project (project-current)))
@@ -53,23 +57,23 @@
                                      (save-selected-window
                                        (neotree-find current-file))))))))))
   
-  (defun neotree-project-root-toggle ()
+  (defun mxns/neotree-project-root-toggle ()
     "Toggle neotree at the project root and find current file."
     (interactive)
     (if (neo-global--window-exists-p)
         (neotree-hide)
-      (neotree-project-root)))
+      (mxns/neotree-project-root)))
 
-  (defun neotree-project-collapse-others ()
+  (defun mxns/neotree-project-collapse-others ()
     "Collapse all neotree nodes and show current file."
     (interactive)
     (when (neo-global--window-exists-p)
       (save-selected-window
         (neo-global--select-window)
         (neotree-collapse-all)))
-    (neotree-project-root))
+    (mxns/neotree-project-root))
   
-  (defun neotree-increase-width (&optional delta)
+  (defun mxns/neotree-increase-width (&optional delta)
     "Increase the neotree window width by DELTA (default 4)."
     (interactive "p")
     (let ((delta (if (= (or delta 1) 1) 4 delta)))
@@ -77,20 +81,22 @@
       (when (neo-global--window-exists-p)
         (neo-global--set-window-width neo-window-width))))
 
-  (defun neotree-reset-width ()
+  (defun mxns/neotree-reset-width ()
     "Reset the neotree window width to the default (30)."
     (interactive)
     (setq neo-window-width 30)
     (when (neo-global--window-exists-p)
       (neo-global--set-window-width neo-window-width)))
 
-  (defun neotree-project-root-after-switch (&rest _args)
+  (defun mxns/neotree-project-root-after-switch (&rest _args)
     "Open neotree at project root after switching projects."
     (when (and (project-current)
                (not current-prefix-arg))  ; skip if called with C-u
-      (neotree-project-root)))
+      (mxns/neotree-project-root)))
   
-  (advice-add 'mxns/project-switch-project :after #'neotree-project-root-after-switch)
+  (advice-add 'prosecco-switch-project :after #'mxns/neotree-project-root)
+  (advice-add 'prosecco-select-project :after #'mxns/neotree-project-root)
+  (advice-add 'project-switch-project :after #'mxns/neotree-project-root)
 )
 
 ;;; init-neotree.el ends here
