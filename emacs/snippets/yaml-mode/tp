@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: template parameter
+# key: tp
+# --
+\${${1:some.parameter}}$0
