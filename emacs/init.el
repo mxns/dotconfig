@@ -427,6 +427,8 @@ With universal argument ARG, use current configuration."
 (use-package company
   :delight
   :bind (("M-TAB" . company-complete))
+  :custom
+  (company-dabbrev-other-buffers t)
   :init
   (global-company-mode))
 
