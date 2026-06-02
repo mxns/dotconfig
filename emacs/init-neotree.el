@@ -94,9 +94,9 @@
                (not current-prefix-arg))  ; skip if called with C-u
       (mxns/neotree-project-root)))
   
-  (advice-add 'prosecco-switch-project :after #'mxns/neotree-project-root)
-  (advice-add 'prosecco-select-project :after #'mxns/neotree-project-root)
-  (advice-add 'project-switch-project :after #'mxns/neotree-project-root)
+  (advice-add 'prosecco-switch-project :after #'mxns/neotree-project-root-after-switch)
+  (advice-add 'prosecco-select-project :after #'mxns/neotree-project-root-after-switch)
+  (advice-add 'project-switch-project :after #'mxns/neotree-project-root-after-switch)
 )
 
 ;;; init-neotree.el ends here

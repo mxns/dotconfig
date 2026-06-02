@@ -205,13 +205,14 @@ With universal argument ARG, use current configuration."
     (define-key map "D" 'project-dired)
     (define-key map "c" 'mxns/tree-compile)
     (define-key map "d" 'project-find-dir)
-    (define-key map "f" 'consult-find)
+    (define-key map "f" 'consult-fd)
     (define-key map "g" 'consult-ripgrep)
     (define-key map "o" 'project-find-file)
     (define-key map "p" 'prosecco-switch-project)
     (define-key map "q" 'prosecco-kill-project)
     (define-key map "r" 'project-query-replace-regexp)
     (define-key map "s" 'prosecco-save-project)
+    (define-key map "v" 'prosecco-revert-project)
     (define-key map "\C-b" 'project-list-buffers)
     (define-key map "\C-p" 'prosecco-select-project)
     map)
@@ -228,6 +229,7 @@ With universal argument ARG, use current configuration."
     "q" "Kill project"
     "r" "Query replace regexp"
     "s" "Save project"
+    "v" "Revert project"
     "C-b" "List buffers"
     "C-p" "Select project"
     )
@@ -583,24 +585,40 @@ With universal argument ARG, use current configuration."
 (use-package org
   :ensure nil
   :mode ("\\.org\\'" . org-mode)
-  :bind (:map org-mode-map
-              ("C-c '" . org-edit-special))
+  :bind (("C-c c" . org-capture)
+         ("C-c a" . org-agenda)
+         (:map org-mode-map
+               ("C-c '" . org-edit-special)))
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
      (R . t)
      (shell . t)))
-  (setq org-confirm-babel-evaluate nil
+  (setq org-agenda-files '("~/org/")
+        org-confirm-babel-evaluate nil
         org-src-fontify-natively t
         org-src-tab-acts-natively t
         org-src-preserve-indentation t
         org-src-window-setup 'current-window
-        org-edit-src-content-indentation 0))
-
-;;; init.el ends here
-(put 'dired-find-alternate-file 'disabled nil)
-(put 'scroll-left 'disabled nil)
+        org-edit-src-content-indentation 0
+        ;; org directory and capture
+        org-directory "~/org/"
+        org-default-notes-file "~/org/inbox.org"
+        org-capture-templates
+        '(("t" "Todo" entry (file "~/org/inbox.org")
+           "* TODO %?\n  %U")
+          ("b" "Bookmark" entry (file "~/org/inbox.org")
+           "* TODO %?\n  %U\n  %a")
+          ("n" "Note" entry (file "~/org/inbox.org")
+           "* %?\n  %U")
+          ("j" "Journal" entry (file+datetree "~/org/journal.org")
+           "* %?\n  %U"))
+        org-refile-targets '((org-agenda-files :maxlevel . 2))
+        org-refile-use-outline-path 'file
+        org-outline-path-complete-in-steps nil
+        org-refile-allow-creating-parent-nodes 'confirm
+        org-cycle-separator-lines 1))
 
 
 (use-package markdown-mode
@@ -609,3 +627,8 @@ With universal argument ARG, use current configuration."
   :init (setq markdown-command "/opt/homebrew/bin/pandoc")
   :bind (:map markdown-mode-map
               ("C-c C-e" . markdown-do)))
+
+
+;;; init.el ends here
+(put 'dired-find-alternate-file 'disabled nil)
+(put 'scroll-left 'disabled nil)
