@@ -72,6 +72,8 @@
 (xterm-mouse-mode 1)
 (mouse-wheel-mode 1)
 
+(setq ediff-split-window-function #'split-window-horizontally)
+(setq ediff-window-setup-function #'ediff-setup-windows-plain)
 
 ;; Decode modifyOtherKeys C-M- sequences (\e[27;7;<keycode>~) sent by Alacritty/tmux
 (defun mxns/setup-terminal-keys ()
