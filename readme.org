@@ -1,18 +1,17 @@
 * Config
 
-This file is the source of truth. ~README.md~ is generated from it by a
-git pre-commit hook (see ~.githooks/~) and renders the result on GitHub, so
-edit ~readme.org~ here and never ~README.md~ by hand. On a fresh clone, run
-~git config core.hooksPath .githooks~ once to enable the hook.
+~README.md~ is generated from ~readme.org~ by a git pre-commit hook
+(see ~.githooks/~). On a fresh clone, run ~git config core.hooksPath
+.githooks~ once to enable the hook.
 
 To regenerate it by hand, load ~.githooks/export-readme.el~ and run
-~M-x my/export-readme~ (or ~C-c C-e G~) from this buffer.
+~M-x my/export-readme~ (or ~C-c C-e G~) from a ~readme.org~ buffer.
 
 * tmux
 
 The prefix is ~C-a~. This clashes with the ubiquitous
-~move-beginning-of-line~, which is idempotent and non-destructive -
-just press ~C-a~ twice.
+~move-beginning-of-line~, selected for being idempotent and
+non-destructive - just press ~C-a~ twice.
 
 #+BEGIN_SRC shell
 tmux kill-server
@@ -34,6 +33,10 @@ continuum automatically restores the last saved state. No manual step.
 
 * emacs
 
+** General
+
+- ~package-install-upgrade-built-in~ :: ensures that built-in packages are upgraded
+  
 ** eglot
 
 *** eglot-java
@@ -55,16 +58,74 @@ curl -L "https://www.eclipse.org/downloads/download.php?file=/jdtls/milestones/1
 
 Alternatively, ~brew install jdtls~ and eglot-java will find it via CLASSPATH or the PATH.
 
-** prosecco
+**** Troubleshooting
 
-Manage your projects. Find all commands under ~C-c p~.
+***** Example
+
+Eenabling ~eglot-java-mode~ in a Java buffer fails immediately with:
+
+#+BEGIN_EXAMPLE
+[eglot] -1: Server died
+jsonrpc--process-sentinel(... "exited abnormally with code 13")
+#+END_EXAMPLE
+
+eglot-java keeps one workspace per project under
+~~/.config/emacs/eglot-java-eclipse-jdt-cache/<md5>/~. If the server
+was killed without a clean shutdown (Emacs quit, machine slept,
+crash), it leaves a dirty resource snapshot. On the next start JDT LS
+tries to restore that snapshot, hits an ~ObjectNotFoundException~ for
+a build artifact under ~target/~ that no longer exists, the
+~org.eclipse.core.resources~ bundle fails to start, and the OSGi
+framework aborts with exit code 13.
+
+***** Read the workspace log
+
+#+BEGIN_SRC shell
+ls -t ~/.config/emacs/eglot-java-eclipse-jdt-cache/*/.metadata/.log | head
+# look for exceptions and errors
+#+END_SRC
+
+***** Clear the workspace cache
+
+The cache is a pure regenerable index, so deleting it is safe (it just
+re-indexes on next start). Wipe all of it:
+
+#+BEGIN_SRC shell
+rm -rf ~/.config/emacs/eglot-java-eclipse-jdt-cache/*
+#+END_SRC
+
+Then re-open the Java file or call ~M-x eglot-java-mode~.
+
+***** Workspace configuration
+
+Keep JDT from indexing Maven/Gradle build output, is may go
+stale. Exclude those dirs via the workspace config:
+
+#+BEGIN_SRC emacs-lisp
+(setq-default eglot-workspace-configuration
+  '(:java (:import (:exclusions ["**/node_modules/**"
+                                 "**/.git/**"
+                                 "**/target/**"
+                                 "**/build/**"]))))
+#+END_SRC
+
+** prosecco
+Manage your projects. Find the menu under ~C-c p~.
+
+This minor mode hijacks the standard ~C-x b~ keybinding to switch
+between buffers: it will show only buffers that belong to the current
+project, plus any buffers that do not belong to any project. Use the
+universal argument to retain the standard behavior of the keybinding.
+
+- ~project-forget-project~ :: forget project
 
 ** Find stuff
 
 *** consult-ripgrep
+Grep in project. Use the universal argument to specify
+directory. Requires ~rg~ to be installed.
 
-Requires ~rg~ to be installed. Useful parameters:
-
+Useful parameters:
 - ~--glob=some_dir/**/*.json~ :: can use multiple globs. negate with ~!~
 - ~--hidden, --no-ignore, -u~ :: grep in hidden/ignored files
 - use with universal argument to grep in selected subdir
@@ -72,9 +133,10 @@ Requires ~rg~ to be installed. Useful parameters:
 Read the ~rg~ man pages for more info.
 
 *** consult-fd
+Find files in project. Use the universal argument to specify
+directory. Requires ~fd~ to be installed.
 
-Requires ~fd~ to be installed. Useful parameters:
-
+Useful parameters:
 - ~--glob=some_dir/**/*.json~ :: can use multiple globs. negate with ~!~
 - ~--hidden, --no-ignore, -u~ :: grep in hidden/ignored files
 - use with universal argument to find under selected subdir
