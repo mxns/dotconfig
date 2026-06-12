@@ -29,7 +29,19 @@
   
   ;; Show all available completions
   (setq eglot-ignored-server-capabilities '())
-  
+
+  ;; Turn off the code-action lightbulb in the margin
+  (setq eglot-code-action-indications nil)
+
+  ;; Keep JDT from indexing build output (target/, build/). Indexing
+  ;; volatile, frequently-deleted build artifacts is what corrupts the
+  ;; per-project workspace cache and makes the server die with exit 13.
+  (setq-default eglot-workspace-configuration
+                '(:java (:import (:exclusions ["**/node_modules/**"
+                                               "**/.git/**"
+                                               "**/target/**"
+                                               "**/build/**"]))))
+
   ;; Use custom server commands if needed
   ;; (add-to-list 'eglot-server-programs
   ;;              '(java-mode . ("jdtls")))

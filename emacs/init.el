@@ -17,6 +17,11 @@
 ;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'load-path (expand-file-name "local/" user-emacs-directory))
 
+;; Let package.el upgrade built-in packages from ELPA. Without this,
+;; packages bundled with Emacs (e.g. transient) shadow newer versions
+;; that magit/rg require, and :ensure silently skips installing them.
+(setq package-install-upgrade-built-in t)
+
 (package-initialize)
 ;;; (package-refresh-contents)
 
