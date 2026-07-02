@@ -47,6 +47,21 @@
   ;;              '(java-mode . ("jdtls")))
   )
 
+;; macOS kqueue uses one file descriptor per watched directory, and the
+;; per-process limit (~256) is far smaller than the number of dirs in a
+;; multi-module Maven repo. JDT-LS registers `workspace/didChangeWatchedFiles'
+;; with broad globs (**/*.java, **/src/**, every module's target/...), so
+;; eglot's default handler recurses the tree adding watches until it crashes
+;; with "no file descriptor left". Override the handler to a no-op: we skip
+;; server-side notification of out-of-Emacs file changes (run `eglot-reconnect'
+;; after a git pull / code generation) in exchange for a stable connection.
+(with-eval-after-load 'eglot
+  (cl-defmethod eglot-register-capability
+    (server (method (eql workspace/didChangeWatchedFiles)) id &key watchers)
+    "No-op file-watch registration to avoid macOS kqueue fd exhaustion."
+    (ignore watchers)
+    (eglot-unregister-capability server method id)))
+
 (use-package eglot-java
   :ensure t
   :hook (java-ts-mode . eglot-java-mode))
