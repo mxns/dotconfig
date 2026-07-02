@@ -215,10 +215,10 @@ With universal argument ARG, use current configuration."
     (define-key map "f" 'consult-fd)
     (define-key map "g" 'consult-ripgrep)
     (define-key map "o" 'project-find-file)
-    (define-key map "p" 'prosecco-switch-project)
-    (define-key map "q" 'prosecco-kill-project)
+    (define-key map "b" 'prosecco-switch-project)
+    (define-key map "k" 'prosecco-kill-project)
     (define-key map "r" 'project-query-replace-regexp)
-    (define-key map "s" 'prosecco-save-project)
+    (define-key map "w" 'prosecco-save-project)
     (define-key map "v" 'prosecco-revert-project)
     (define-key map "\C-b" 'project-list-buffers)
     (define-key map "\C-p" 'prosecco-select-project)
@@ -229,13 +229,13 @@ With universal argument ARG, use current configuration."
     "D" "Open in Dired"
     "c" "Compile"
     "d" "Find directory"
-    "f" "Fd"
-    "g" "Rg"
+    "f" "Find file"
+    "g" "Grep"
     "o" "Open file"
-    "p" "Switch project"
-    "q" "Kill project"
+    "b" "Switch project"
+    "k" "Kill project"
     "r" "Query replace regexp"
-    "s" "Save project"
+    "w" "Save project"
     "v" "Revert project"
     "C-b" "List buffers"
     "C-p" "Select project"
