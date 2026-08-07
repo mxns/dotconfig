@@ -66,6 +66,19 @@
 (when (file-exists-p custom-file)
   (load custom-file 'noerror 'nomessage))
 ;; (load (expand-file-name "init-nav" user-emacs-directory))
+
+;; Modus themes ship with Emacs as loadable themes (in etc/themes), but the
+;; `modus-themes' library isn't on `load-path', so use-package's implicit
+;; (require 'modus-themes) fails. Set the variable, then load the theme
+;; directly; the theme file defines the defcustoms and reads them at load time.
+(setq modus-themes-headings
+      '((1 . (variable-pitch 1.5))
+        (2 . (1.3))
+        (3 . (1.15))
+        (4 . (1.05))
+        (t . (1.1))))
+(load-theme 'modus-vivendi t)
+
 (use-package fixed-point
   :ensure nil
   :bind (("C-c n" . mxns/fixed-point-mode)
@@ -601,3 +614,4 @@ With universal argument ARG, use current configuration."
 ;;; init.el ends here
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'scroll-left 'disabled nil)
+(put 'narrow-to-region 'disabled nil)
