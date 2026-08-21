@@ -67,16 +67,27 @@
   (load custom-file 'noerror 'nomessage))
 ;; (load (expand-file-name "init-nav" user-emacs-directory))
 
+;; Fonts. Menlo for code/UI (fixed-pitch), Charter for prose/headings
+;; (variable-pitch). set-face-attribute applies to all current and future
+;; frames, so this works under emacsclient/daemon too.
+(set-face-attribute 'default        nil :family "JetBrains Mono" :height 140)
+(set-face-attribute 'fixed-pitch    nil :family "JetBrains Mono" :height 140)
+(set-face-attribute 'variable-pitch nil :family "Nunito"         :height 160)
+(setq-default line-spacing 0.2)
+
 ;; Modus themes ship with Emacs as loadable themes (in etc/themes), but the
 ;; `modus-themes' library isn't on `load-path', so use-package's implicit
-;; (require 'modus-themes) fails. Set the variable, then load the theme
+;; (require 'modus-themes) fails. Set the variables, then load the theme
 ;; directly; the theme file defines the defcustoms and reads them at load time.
-(setq modus-themes-headings
-      '((1 . (variable-pitch 1.5))
-        (2 . (1.3))
-        (3 . (1.15))
-        (4 . (1.05))
-        (t . (1.1))))
+;; `mixed-fonts' keeps code blocks, tables and inline verbatim monospace even
+;; when variable-pitch-mode is on.
+(setq modus-themes-mixed-fonts t
+      modus-themes-headings
+      '((1 . (variable-pitch bold 1.5))
+        (2 . (variable-pitch bold 1.3))
+        (3 . (variable-pitch semibold 1.15))
+        (4 . (variable-pitch semibold 1.05))
+        (t . (variable-pitch 1.1))))
 (load-theme 'modus-vivendi t)
 
 (use-package fixed-point
