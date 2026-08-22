@@ -614,12 +614,25 @@ With universal argument ARG, use current configuration."
   :ensure t)
 
 
+(defun mxns/markdown-toggle-narrow-to-subtree ()
+  "Toggle narrowing to the current markdown subtree (like `org-toggle-narrow-to-subtree')."
+  (interactive)
+  (if (buffer-narrowed-p)
+      (widen)
+    (markdown-narrow-to-subtree)))
+
 (use-package markdown-mode
   :ensure t
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "/opt/homebrew/bin/pandoc")
   :bind (:map markdown-mode-map
-              ("C-c C-e" . markdown-do)))
+              ("C-c C-e" . markdown-do)
+              ;; Mirror my custom org nav keys (folding, C-c C-n/p/f/b/u and
+              ;; the M-<arrows> already match org in markdown-mode by default).
+              ("C-c n" . markdown-outline-next)
+              ("C-c p" . markdown-outline-previous)
+              ("C-c u" . markdown-outline-up)
+              ("C-c N" . mxns/markdown-toggle-narrow-to-subtree)))
 
 
 ;;; init.el ends here
