@@ -31,6 +31,7 @@ to it (base date plus or minus a fixed number of days)."
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
+     (python . t)
      (R . t)
      (shell . t)))
   (setq org-agenda-files '("~/org/")
@@ -60,6 +61,7 @@ to it (base date plus or minus a fixed number of days)."
         org-outline-path-complete-in-steps nil
         org-refile-allow-creating-parent-nodes 'confirm
         org-cycle-separator-lines 1
+        org-return-follows-link t       ; RET on a link follows it
         ;; Cleaner display
         org-startup-indented t          ; indent tree, hide leading stars
         org-hide-emphasis-markers t     ; show *bold* as bold, not with markers
