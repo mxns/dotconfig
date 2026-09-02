@@ -90,11 +90,6 @@
         (t . (variable-pitch 1.1))))
 (load-theme 'modus-vivendi t)
 
-(use-package fixed-point
-  :ensure nil
-  :bind (("C-c n" . mxns/fixed-point-mode)
-         ("C-v"   . mxns/fixed-point-scroll-up)
-         ("M-v"   . mxns/fixed-point-scroll-down)))
 (load (expand-file-name "init-neotree" user-emacs-directory))
 (load (expand-file-name "init-sql-client" user-emacs-directory))
 (load (expand-file-name "init-eglot" user-emacs-directory))
@@ -294,6 +289,7 @@ With universal argument ARG, use current configuration."
   (avy-setup-default)
   :bind-keymap
   ("M-g" . mxns/avy-prefix-map)
+  ("C-c j" . 'avy-goto-word-1)
 )
 
 
@@ -342,6 +338,7 @@ With universal argument ARG, use current configuration."
   ;; Only enable for specific major modes
   (setq undo-fu-session-mode-hook-allow-list
         '(text-mode-hook
+          org-mode-hook
           prog-mode-hook
           conf-mode-hook))
   
