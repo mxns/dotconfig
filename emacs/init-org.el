@@ -15,6 +15,23 @@ to it (base date plus or minus a fixed number of days)."
      "** TODO Skicka välkomstbrev\nSCHEDULED: " (funcall day -30)  "\n"
      "** TODO Återställa lösenord Aptus\nSCHEDULED: " (funcall day 0))))
 
+(defvar mxns/org-prefix-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "t" 'org-todo)
+    (define-key map "s" 'org-schedule)
+    (define-key map "d" 'org-deadline)
+    (define-key map "r" 'org-refile)
+    (define-key map "a" 'org-archive-subtree)
+    map)
+  "Keymap for my most-used org commands.")
+
+(which-key-add-keymap-based-replacements mxns/org-prefix-map
+    "t" "Todo state"
+    "s" "Schedule"
+    "d" "Deadline"
+    "r" "Refile"
+    "a" "Archive")
+
 (use-package org
   :ensure nil
   :mode ("\\.org\\'" . org-mode)
@@ -26,15 +43,17 @@ to it (base date plus or minus a fixed number of days)."
                ("C-c n" . org-next-visible-heading)      ; next heading
                ("C-c p" . org-previous-visible-heading)  ; previous heading
                ("C-c u" . outline-up-heading)            ; up to parent
-               ("C-c N" . org-toggle-narrow-to-subtree))); focus one subtree
+               ("C-c N" . org-toggle-narrow-to-subtree))) ; focus one subtree
   :config
+  (define-key org-mode-map (kbd "C-c o") mxns/org-prefix-map)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
      (python . t)
      (R . t)
      (shell . t)))
-  (setq org-agenda-files '("~/org/")
+  (setq org-use-fast-todo-selection t  ; single-letter TODO state selection, shows the mapping popup
+        org-agenda-files '("~/org/")
         org-confirm-babel-evaluate nil
         org-src-fontify-natively t
         org-src-tab-acts-natively t
