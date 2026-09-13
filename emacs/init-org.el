@@ -134,5 +134,29 @@ to it (base date plus or minus a fixed number of days)."
                           (?+ . "✿")
                           (?* . "•"))))
 
+;; Version control for the org files themselves (~/org is its own Git repo).
+;; `git-auto-commit-mode' is the usual package for this, but it commits one
+;; file per save, so a single `org-save-all-org-buffers' would land as several
+;; one-file commits. Hang off that command instead and record the whole batch
+;; as a single commit.
+(defun mxns/org-git-commit ()
+  "Stage and commit everything under `org-directory' as a single commit.
+Does nothing when that directory is not a Git repo, or has no changes."
+  (interactive)
+  (let ((default-directory (expand-file-name org-directory)))
+    (when (file-directory-p ".git")
+      (with-temp-buffer
+        (call-process "git" nil t nil "status" "--porcelain")
+        (unless (zerop (buffer-size))       ; nothing changed, nothing to do
+          (erase-buffer)
+          (unless (and (zerop (call-process "git" nil t nil "add" "-A"))
+                       (zerop (call-process "git" nil t nil "commit" "-m"
+                                            (format-time-string
+                                             "org: %Y-%m-%d %H:%M"))))
+            (message "org auto-commit failed: %s"
+                     (string-trim (buffer-string)))))))))
+
+(advice-add 'org-save-all-org-buffers :after #'mxns/org-git-commit)
+
 (provide 'init-org)
 ;;; init-org.el ends here
