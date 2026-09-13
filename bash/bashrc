@@ -23,28 +23,7 @@ export PROMPT_COMMAND="history -a"
 
 alias claude-mxns="CLAUDE_CONFIG_DIR=~/.claude-mxns claude"
 alias claude-ffid="CLAUDE_CONFIG_DIR=~/.claude-ffid claude"
-
-claude-box() {
-  # Per-repo session store, keyed by the host repo path, so --resume/--continue
-  # work across runs without sessions leaking between different repos.
-  local _sess="$HOME/.cache/claude-box/sessions/$(printf '%s' "$PWD" | shasum -a 256 | cut -c1-16)"
-  mkdir -p "$_sess"
-  docker run --rm -it \
-    --group-add 0 \
-    -v "$PWD":/workspace \
-    --tmpfs /home/node/.claude-sandbox:rw,uid=1000,gid=1000,mode=0700 \
-    -v claude-auth:/home/node/.claude-auth \
-    -v "$_sess":/home/node/.claude-sandbox/projects \
-    -v gh-auth:/home/node/.config/gh \
-    -v maven-cache:/home/node/.m2 \
-    -v /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock \
-    -e SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock \
-    -e GIT_AUTHOR_NAME="$(git config --global user.name)" \
-    -e GIT_AUTHOR_EMAIL="$(git config --global user.email)" \
-    -e GIT_COMMITTER_NAME="$(git config --global user.name)" \
-    -e GIT_COMMITTER_EMAIL="$(git config --global user.email)" \
-    claude-sandbox "$@"
-}
+. ~/devel/ffid-projects/agent-sandbox/agent-box.sh
 
 # CONVENIENCE
 
@@ -84,7 +63,7 @@ dzap() {
     docker ps -a --format "{{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Names}}" | pick | cut -c1-12 | xargs -I % bash -c 'docker kill %; docker rm %'
 }
 
-mariadb() {
+dmariadb() {
     while getopts "t" arg; do
         case ${arg} in
             t)
@@ -108,7 +87,7 @@ mariadb() {
     fi
 }
 
-mssql() {
+dmssql() {
     while getopts "t" arg; do
         case ${arg} in
             t)
@@ -132,7 +111,7 @@ mssql() {
     fi
 }
 
-openldap() {
+dopenldap() {
     while getopts "t" arg; do
         case ${arg} in
             t)
