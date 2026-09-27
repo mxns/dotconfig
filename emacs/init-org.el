@@ -12,8 +12,8 @@ to it (base date plus or minus a fixed number of days)."
                   (time-add base (* n 86400))))))
     (concat
      "* TODO Tillträde lgh " name "\n"
-     "** TODO Skicka välkomstbrev\nSCHEDULED: " (funcall day -30)  "\n"
-     "** TODO Återställa lösenord Aptus\nSCHEDULED: " (funcall day 0))))
+     "** TODO Skicka välkomstbrev lgh " name "\nSCHEDULED: " (funcall day -30)  "\n"
+     "** TODO Inflyttning lgh " name ": återställ lösenord Aptus\nSCHEDULED: " (funcall day 0))))
 
 (defvar mxns/org-prefix-map
   (let ((map (make-sparse-keymap)))
@@ -22,6 +22,7 @@ to it (base date plus or minus a fixed number of days)."
     (define-key map "d" 'org-deadline)
     (define-key map "r" 'org-refile)
     (define-key map "a" 'org-archive-subtree)
+    (define-key map "m" 'mxns/org-set-reminder)
     map)
   "Keymap for my most-used org commands.")
 
@@ -30,7 +31,8 @@ to it (base date plus or minus a fixed number of days)."
     "s" "Schedule"
     "d" "Deadline"
     "r" "Refile"
-    "a" "Archive")
+    "a" "Archive"
+    "m" "Reminder")
 
 (use-package org
   :ensure nil
@@ -157,6 +159,33 @@ Does nothing when that directory is not a Git repo, or has no changes."
                      (string-trim (buffer-string)))))))))
 
 (advice-add 'org-save-all-org-buffers :after #'mxns/org-git-commit)
+
+;; Reminders: a REMIND property holding a timestamp with a time. The Android
+;; app (~/devel/mxns/org-reminders) pulls ~/org and notifies at that time.
+(defun mxns/org-set-reminder (&optional remove)
+  "Set the REMIND property of the item at point to a date and time.
+Defaults to the item's SCHEDULED time.  With prefix argument REMOVE,
+delete the reminder instead.  Works in org buffers and the agenda."
+  (interactive "P")
+  (if (derived-mode-p 'org-agenda-mode)
+      (let ((marker (or (org-get-at-bol 'org-hd-marker) (org-agenda-error))))
+        (org-agenda-with-point-at marker
+          (mxns/org-set-reminder remove)))
+    (if remove
+        (progn (org-entry-delete nil "REMIND")
+               (message "Reminder removed"))
+      (let* ((sched (org-entry-get nil "SCHEDULED"))
+             (input (org-read-date t nil nil "Påminnelse"
+                                   (and sched (org-time-string-to-time sched)))))
+        (unless (string-match-p "[0-9]:[0-9]" input)
+          (user-error "A reminder needs a time, e.g. \"fri 12:30\""))
+        (let ((stamp (format-time-string "<%Y-%m-%d %a %H:%M>"
+                                         (org-time-string-to-time input))))
+          (org-entry-put nil "REMIND" stamp)
+          (message "Reminder set: %s" stamp))))))
+
+(with-eval-after-load 'org-agenda
+  (define-key org-agenda-mode-map (kbd "C-c o m") #'mxns/org-set-reminder))
 
 (provide 'init-org)
 ;;; init-org.el ends here

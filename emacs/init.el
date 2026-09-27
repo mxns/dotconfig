@@ -94,11 +94,14 @@
 (load (expand-file-name "init-sql-client" user-emacs-directory))
 (load (expand-file-name "init-eglot" user-emacs-directory))
 (load (expand-file-name "init-org" user-emacs-directory))
+(load (expand-file-name "init-pass" user-emacs-directory))
 (xterm-mouse-mode 1)
 (mouse-wheel-mode 1)
 
 (setq ediff-split-window-function #'split-window-horizontally)
 (setq ediff-window-setup-function #'ediff-setup-windows-plain)
+
+(setq tramp-show-ad-hoc-proxies t)
 
 ;; Decode modifyOtherKeys C-M- sequences (\e[27;7;<keycode>~) sent by Alacritty/tmux
 (defun mxns/setup-terminal-keys ()

@@ -8,7 +8,7 @@
    '(apheleia avy breadcrumb company consult-dir delight eglot-java
               eldoc-box embark-consult ess goggles htmlize magit
               marginalia markdown-mode mixed-pitch neotree orderless
-              org-modern rg terraform-mode transpose-frame
+              org-modern password-store rg terraform-mode transpose-frame
               treesit-auto undo-fu-session vertico vimish-fold vundo
               yaml-mode yasnippet)))
 (custom-set-faces
