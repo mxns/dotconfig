@@ -2,8 +2,8 @@
 
 ;;; Commentary:
 ;;; GUI integration with pass(1). Mirrors tmux/pass-to-pane.sh: pick an
-;;; entry with completion, insert the password at point rather than the
-;;; clipboard, and remember the last entry used. The "last used" state
+;;; entry with completion, insert the password at point (never via the
+;;; kill ring or clipboard), and remember the last entry used. The "last used" state
 ;;; is kept in the same cache file the tmux popup writes, so the two
 ;;; integrations share it -- an entry picked in one shows up as the
 ;;; default in the other.
@@ -70,32 +70,14 @@ Tramp password prompt) without turning that on globally."
     (insert pw)
     (mxns/pass-remember-entry entry)))
 
-(defun mxns/pass-copy (entry)
-  "Copy the password for ENTRY to the clipboard (password-store clears it
-after `password-store-time-before-clipboard-restore' seconds)."
-  (interactive (list (mxns/pass-read-entry)))
-  (password-store-copy entry)
-  (mxns/pass-remember-entry entry))
+;; Deliberately no copy command. `password-store-copy' puts the password
+;; on the kill ring and the system clipboard, and its timer only blanks
+;; the kill-ring entry -- the clipboard keeps the password, and the next
+;; yank pulls it back into the kill ring as a fresh, untracked entry.
+;; Inserting at point never touches either.
+(global-set-key (kbd "C-c P") #'mxns/pass-insert)
 
-(defvar mxns/pass-prefix-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map "p" 'mxns/pass-insert)
-    (define-key map "w" 'mxns/pass-copy)
-    (define-key map "e" 'password-store-edit)
-    (define-key map "g" 'password-store-generate)
-    map)
-  "Keymap for pass(1) commands.")
-
-(which-key-add-keymap-based-replacements mxns/pass-prefix-map
-    "p" "Insert password"
-    "w" "Copy password"
-    "e" "Edit entry"
-    "g" "Generate password"
-    )
-
-(global-set-key (kbd "C-c P") mxns/pass-prefix-map)
-
-;; `C-c P p' is a lot to type at a password prompt. On Emacs 30+,
+;; `C-c P' is a lot to type at a password prompt. On Emacs 30+,
 ;; `read-passwd' -- what Tramp, sudo-edit, etc. use to ask for one --
 ;; turns on `read-passwd-mode' (for the password-visibility toggle),
 ;; whose keymap (`read-passwd-map') takes precedence over anything we
