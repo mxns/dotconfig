@@ -627,7 +627,8 @@ With universal argument ARG, use current configuration."
 (use-package markdown-mode
   :ensure t
   :mode ("README\\.md\\'" . gfm-mode)
-  :init (setq markdown-command "/opt/homebrew/bin/pandoc")
+  :init (setq markdown-command "/opt/homebrew/bin/pandoc"
+              markdown-fontify-code-blocks-natively t)
   :bind (:map markdown-mode-map
               ("C-c C-e" . markdown-do)
               ;; Mirror my custom org nav keys (folding, C-c C-n/p/f/b/u and
@@ -636,6 +637,10 @@ With universal argument ARG, use current configuration."
               ("C-c p" . markdown-outline-previous)
               ("C-c u" . markdown-outline-up)
               ("C-c N" . mxns/markdown-toggle-narrow-to-subtree)))
+
+;; Lets markdown-mode edit code blocks in their own buffer with C-c '.
+(use-package edit-indirect
+  :ensure t)
 
 
 ;;; init.el ends here
