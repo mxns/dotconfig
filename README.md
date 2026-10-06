@@ -38,12 +38,13 @@ tmux kill-server
 ## General
 
 -   **`package-install-upgrade-built-in`:** ensures that built-in packages are upgraded
+-   **`package-autoremove`:** remove orphaned dependencies
+-   **`native-compile-prune-cache`:** delete stale `.eln` files from old Emacs/package versions
+-   **`describe-keymap`:** list a whole keymap, e.g. `mxns/project-prefix-map`
+## 
+## eglot-java
 
-## eglot
-
-### eglot-java
-
-#### Installing JDT LS
+### Installing JDT LS
 
 The download URL is:
 
@@ -60,9 +61,9 @@ curl -L "https://www.eclipse.org/downloads/download.php?file=/jdtls/milestones/1
 
 Alternatively, `brew install jdtls` and eglot-java will find it via CLASSPATH or the PATH.
 
-#### Troubleshooting
+### Troubleshooting
 
-##### Example
+#### Example
 
 Eenabling `eglot-java-mode` in a Java buffer fails immediately with:
 
@@ -78,14 +79,14 @@ a build artifact under `target/` that no longer exists, the
 `org.eclipse.core.resources` bundle fails to start, and the OSGi
 framework aborts with exit code 13.
 
-##### Read the workspace log
+#### Read the workspace log
 
 ```shell
 ls -t ~/.config/emacs/eglot-java-eclipse-jdt-cache/*/.metadata/.log | head
 # look for exceptions and errors
 ```
 
-##### Clear the workspace cache
+#### Clear the workspace cache
 
 The cache is a pure regenerable index, so deleting it is safe (it just
 re-indexes on next start). Wipe all of it:
@@ -96,7 +97,7 @@ rm -rf ~/.config/emacs/eglot-java-eclipse-jdt-cache/*
 
 Then re-open the Java file or call `M-x eglot-java-mode`.
 
-##### Workspace configuration
+#### Workspace configuration
 
 Keep JDT from indexing Maven/Gradle build output, is may go
 stale. Exclude those dirs via the workspace config:
@@ -109,7 +110,7 @@ stale. Exclude those dirs via the workspace config:
                                  "**/build/**"]))))
 ```
 
-##### File watching
+#### File watching
 
 JDT-LS asks eglot to watch files, which sometimes makes the process run out of file descriptors:
 
