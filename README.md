@@ -1,16 +1,4 @@
-<!-- Generated from readme.org by the pre-commit hook. Do not edit directly. -->
-
-
 # CONFIG
-
-/~README.md~ is generated from `readme.org` by a git pre-commit hook
-(see `.githooks/`). On a fresh clone, run `git config core.hooksPath
-.githooks` once to enable the hook.
-
-To regenerate it manually, load `.githooks/export-readme.el` and run
-`M-x my/export-readme` (or `C-c C-e G`) from a `readme.org` buffer.
-/
-
 
 # TMUX (`C-a`)
 
@@ -18,52 +6,42 @@ The prefix is `C-a`. This clashes with the ubiquitous
 `move-beginning-of-line`, selected for being idempotent and
 non-destructive - just press `C-a` twice.
 
-
 ## continuum and resurrect
-
 
 ### Auto-save
 
 Every 15 minutes your full environment is written to disk.
-
 
 ### Auto-restore
 
 When a fresh tmux server starts (after kill-server or reboot),
 continuum automatically restores the last saved state. No manual step.
 
-
 ### Manual control
 
 -   **`C-a C-s`:** save now
 -   **`C-a C-r`:** restore now
 
-
 ## Useful commands
 
-`C-a SPC` :: cycle through window layouts
-`C-a z`   :: zoom current window
-`C-a o`   :: go to other window
-`C-a C-o` :: rotate windows
+-   **`C-a SPC`:** cycle through window layouts
+-   **`C-a z`:** zoom current window
+-   **`C-a o`:** go to other window
+-   **`C-a C-o`:** rotate windows
 
 ```shell
 tmux kill-server
 ```
 
-
 # EMACS
-
 
 ## General
 
 -   **`package-install-upgrade-built-in`:** ensures that built-in packages are upgraded
 
-
 ## eglot
 
-
 ### eglot-java
-
 
 #### Installing JDT LS
 
@@ -82,9 +60,7 @@ curl -L "https://www.eclipse.org/downloads/download.php?file=/jdtls/milestones/1
 
 Alternatively, `brew install jdtls` and eglot-java will find it via CLASSPATH or the PATH.
 
-
 #### Troubleshooting
-
 
 ##### Example
 
@@ -102,14 +78,12 @@ a build artifact under `target/` that no longer exists, the
 `org.eclipse.core.resources` bundle fails to start, and the OSGi
 framework aborts with exit code 13.
 
-
 ##### Read the workspace log
 
 ```shell
 ls -t ~/.config/emacs/eglot-java-eclipse-jdt-cache/*/.metadata/.log | head
 # look for exceptions and errors
 ```
-
 
 ##### Clear the workspace cache
 
@@ -121,7 +95,6 @@ rm -rf ~/.config/emacs/eglot-java-eclipse-jdt-cache/*
 ```
 
 Then re-open the Java file or call `M-x eglot-java-mode`.
-
 
 ##### Workspace configuration
 
@@ -136,7 +109,6 @@ stale. Exclude those dirs via the workspace config:
                                  "**/build/**"]))))
 ```
 
-
 ##### File watching
 
 JDT-LS asks eglot to watch files, which sometimes makes the process run out of file descriptors:
@@ -147,7 +119,6 @@ To fix this, the registration method has been overridden with a
 no-op. This means JDT-LS won't be auto-notified of files changed
 outside Emacs (e.g. git pull, mvn generate-sources) — you have to M-x
 eglot-reconnect after such changes.
-
 
 ## prosecco
 
@@ -160,9 +131,7 @@ universal argument to retain the standard behavior of the keybinding.
 
 -   **`project-forget-project`:** forget projects when the list is getting too long
 
-
 ## Find stuff
-
 
 ### consult-ripgrep
 
@@ -177,7 +146,6 @@ Useful parameters:
 
 Read the `rg` man pages for more info.
 
-
 ### consult-fd
 
 Find files in project. Use the universal argument to specify
@@ -191,7 +159,6 @@ Useful parameters:
 
 Read the `fd` man pages for more info.
 
-
 ## Useful tricks
 
 -   **`consult-theme`:** switch theme
@@ -204,9 +171,7 @@ Read the `fd` man pages for more info.
 -   **`transpose-frame`:** transpose the frame layout
 -   **`M-q`:** runs `fill-paragraph`, which re-wraps the current paragraph to fit within `fill-column` (default 70, often set higher)
 
-
 ## Troubleshooting
-
 
 ### When packages starts to fail
 
@@ -222,7 +187,6 @@ If that doesn't help, or if you want to be more specific, here are some other th
 -   **`package-refresh-contents`:** refresh the archive listings so the latest versions are visible
 -   **`package-reinstall`:** reinstall the offending package against the current dependencies
 -   **`byte-recompile-directory` or `package-recompile-all`:** rebuild stale `.elc` files left over from the old version
-
 
 ### When a single function starts to fail
 
