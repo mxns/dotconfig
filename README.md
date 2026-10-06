@@ -155,31 +155,34 @@ as one commit. Commits only, never pushes.
 
 ## Find stuff
 
+`C-x p g` ripgrep, `C-x p f` fd. `C-c p` works too, except in org and
+markdown buffers, where it's heading nav. `C-u` first to pick the
+directory. `M-n` pulls in the symbol at point.
+
+Input is `pattern -flags`: everything from the first ` -` goes to the
+command, no shell quoting. Lead with `#` to add a local filter on the
+results: `#defun -g *.el#hook`.
+
 ### consult-ripgrep
 
-Grep in project. Use the universal argument to specify
-directory. Requires `rg` to be installed.
-
-Useful parameters:
-
--   **`--glob=some_dir/**/*.json`:** can use multiple globs. negate with `!`
--   **`--hidden, --no-ignore, -u`:** grep in hidden/ignored files
--   use with universal argument to grep in selected subdir
-
-Read the `rg` man pages for more info.
+-   **`-g some_dir/**/*.json`:** limit to glob, repeatable; `-g !*.min.js` excludes
+-   **`-t py` / `-T py`:** only / skip a file type (`rg --type-list`)
+-   **`-uu`:** include ignored and hidden files (`-u` is ignored only)
+-   **`-F` / `-w`:** literal string / whole words
+-   smart case: all lowercase ignores case
 
 ### consult-fd
 
-Find files in project. Use the universal argument to specify
-directory. Requires `fd` to be installed.
+-   **`some_dir/**/*.json -g`:** input is a glob, matched against the full path
+-   **`-e json`:** by extension
+-   **`-t f` / `-t d`:** files / directories only
+-   **`-E node_modules`:** exclude
+-   **`-u`:** include ignored and hidden files
 
-Useful parameters:
+### Edit across files
 
--   **`--glob=some_dir/**/*.json`:** can use multiple globs. negate with `!`
--   **`--hidden, --no-ignore, -u`:** grep in hidden/ignored files
--   use with universal argument to find under selected subdir
-
-Read the `fd` man pages for more info.
+`C-; e` (embark-export) the ripgrep hits into a grep buffer, `e` to
+edit in place (wgrep), `C-c C-c` to apply, `C-x s` to save.
 
 ## Useful tricks
 
