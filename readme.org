@@ -1,21 +1,18 @@
-* Config
+* CONFIG
 
-~README.md~ is generated from ~readme.org~ by a git pre-commit hook
+/~README.md~ is generated from ~readme.org~ by a git pre-commit hook
 (see ~.githooks/~). On a fresh clone, run ~git config core.hooksPath
 .githooks~ once to enable the hook.
 
-To regenerate it by hand, load ~.githooks/export-readme.el~ and run
+To regenerate it manually, load ~.githooks/export-readme.el~ and run
 ~M-x my/export-readme~ (or ~C-c C-e G~) from a ~readme.org~ buffer.
+/
 
-* tmux
+* TMUX (~C-a~)
 
 The prefix is ~C-a~. This clashes with the ubiquitous
 ~move-beginning-of-line~, selected for being idempotent and
 non-destructive - just press ~C-a~ twice.
-
-#+BEGIN_SRC shell
-tmux kill-server
-#+END_SRC
 
 ** continuum and resurrect
 
@@ -31,7 +28,18 @@ continuum automatically restores the last saved state. No manual step.
 - ~C-a C-s~ :: save now
 - ~C-a C-r~ :: restore now
 
-* emacs
+** Useful commands
+
+~C-a SPC~ :: cycle through window layouts
+~C-a z~   :: zoom current window
+~C-a o~   :: go to other window
+~C-a C-o~ :: rotate windows
+
+#+BEGIN_SRC shell
+tmux kill-server
+#+END_SRC
+
+* EMACS
 
 ** General
 
@@ -109,6 +117,17 @@ stale. Exclude those dirs via the workspace config:
                                  "**/build/**"]))))
 #+END_SRC
 
+***** File watching
+
+JDT-LS asks eglot to watch files, which sometimes makes the process run out of file descriptors:
+
+~"File watching not possible, no file descriptor left"~
+
+To fix this, the registration method has been overridden with a
+no-op. This means JDT-LS won't be auto-notified of files changed
+outside Emacs (e.g. git pull, mvn generate-sources) — you have to M-x
+eglot-reconnect after such changes.
+
 ** prosecco
 Manage your projects. Find the menu under ~C-c p~.
 
@@ -117,7 +136,7 @@ between buffers: it will show only buffers that belong to the current
 project, plus any buffers that do not belong to any project. Use the
 universal argument to retain the standard behavior of the keybinding.
 
-- ~project-forget-project~ :: forget project
+- ~project-forget-project~ :: forget projects when the list is getting too long
 
 ** Find stuff
 
@@ -152,6 +171,8 @@ Read the ~fd~ man pages for more info.
   2. Press ~M-y~ (Alt + y) to cycle through the kill ring.
 - ~dired-jump~ :: open dired buffer corresponding to current buffer
 - ~embark-act~ :: use while in minibuffer with ~C-.~ 
+- ~transpose-frame~ :: transpose the frame layout
+- ~M-q~ :: runs ~fill-paragraph~, which re-wraps the current paragraph to fit within ~fill-column~ (default 70, often set higher)
   
 ** Troubleshooting
 
