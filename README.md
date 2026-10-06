@@ -131,6 +131,28 @@ universal argument to retain the standard behavior of the keybinding.
 
 -   **`project-forget-project`:** forget projects when the list is getting too long
 
+## org
+
+Everything lives in `~/org/` (own git repo); captures land in `inbox.org`.
+
+-   **`C-c c`:** capture: `t` todo, `b` bookmark (with link), `n` note, `j` journal, `r` tillträde (subtasks scheduled from one date)
+-   **`C-c a`:** agenda (week view, starts Monday)
+-   **`C-c o`:** `t` todo, `s` schedule, `d` deadline, `r` refile, `a` archive, `m` reminder
+-   **`C-c n` / `C-c p` / `C-c u`:** next / previous / parent heading
+-   **`C-c N`:** toggle narrow to subtree
+-   **`C-c '`:** edit src block; `C-c C-c` runs it without confirmation (elisp, python, R, shell)
+
+### Reminders
+
+`C-c o m` sets a `REMIND` timestamp (defaults to SCHEDULED, must have a
+time); `C-u` to remove. Works in the agenda too. Picked up by the
+org-reminders Android app.
+
+### Auto-commit
+
+`org-save-all-org-buffers` (`s` in the agenda) commits all of `~/org/`
+as one commit. Commits only, never pushes.
+
 ## Find stuff
 
 ### consult-ripgrep
