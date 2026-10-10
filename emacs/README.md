@@ -2,9 +2,16 @@
 
 ## GENERAL
 
+#### Maintenance
+
+-   **`package-refresh-contents`:** refresh the archive listings so the latest versions are visible
+-   **`package-upgrade-all`:** bring everything to mutually compatible versions
 -   **`package-install-upgrade-built-in`:** ensures that built-in packages are upgraded
 -   **`package-autoremove`:** remove orphaned dependencies
 -   **`native-compile-prune-cache`:** delete stale `.eln` files from old Emacs/package versions
+
+#### Help
+
 -   **`describe-keymap`:** list a whole keymap, e.g. `mxns/project-prefix-map`
 
 ## PROSECCO
@@ -22,12 +29,18 @@ universal argument to retain the standard behavior of the keybinding.
 
 Everything lives in `~/org/` (own git repo); captures land in `inbox.org`.
 
--   **`C-c c`:** capture: `t` todo, `b` bookmark (with link), `n` note, `j` journal, `r` tillträde (subtasks scheduled from one date)
--   **`C-c a`:** agenda (week view, starts Monday)
+-   **`C-c c`:** capture
+-   **`C-c a`:** agenda
 -   **`C-c o`:** `t` todo, `s` schedule, `d` deadline, `r` refile, `a` archive, `m` reminder
--   **`C-c n` / `C-c p` / `C-c u`:** next / previous / parent heading
+-   **`C-c n` / `C-c p`:** next / previous heading
+-   **`C-c C-f` / `C-c C-b`:** next / previous heading on the same level
+-   **`C-c u`:** parent heading
 -   **`C-c N`:** toggle narrow to subtree
--   **`C-c '`:** edit src block; `C-c C-c` runs it without confirmation (elisp, python, R, shell)
+-   **`M-RET`:** new heading below; at line start: above; mid-title: splits; on text: turns it into a heading
+-   **`C-<return>`:** new heading after the subtree; `C-u C-u M-RET` after the parent's
+-   **`M-S-<return>` / `C-S-<return>`:** same, as TODO
+-   **`C-c *`:** toggle line between heading and text
+-   **`RET` / `C-c C-o`:** follow link at point; `M-,` or `C-c &` jumps back
 
 ### Reminders
 
@@ -40,6 +53,31 @@ org-reminders Android app.
 `org-save-all-org-buffers` (`s` in the agenda) commits all of `~/org/`
 as one commit. Commits only, never pushes.
 
+### Babel
+
+Languages: elisp, python, R, shell. No confirmation before running.
+
+-   **`C-c C-,`:** insert block (`s` for src)
+-   **`C-c C-c`:** run block; output lands under `#+RESULTS:`
+-   **`C-c '`:** edit block in its language's mode
+-   **`C-c C-v t`:** tangle to files; `C-c C-v C-h` lists all `C-c C-v` commands
+
+Header args, after the language: `#+begin_src python :session :results output`
+
+-   **`:results output`:** what was printed (default `value`: what was returned)
+-   **`:session`:** shared interpreter across blocks
+-   **`:var x=name`:** input from a named block or table
+-   **`:tangle file.py`:** target for tangling
+-   **`:dir /ssh:host:`:** run elsewhere
+-   file-wide: `#+PROPERTY: header-args:python :session :results output`
+
+Literate programming: the org file is the source, code files are generated.
+
+1.  `#+PROPERTY: header-args:emacs-lisp :tangle init.el` sends all blocks to one file; `:tangle no` keeps one out
+2.  develop with `C-c C-c`, tangle with `C-c C-v t` (or on save)
+3.  `:noweb yes` + `<<name>>` assembles blocks in any order
+4.  edit only the org; `:comments link` + `org-babel-tangle-jump-to-org` gets back from generated code
+
 ## MARKDOWN
 
 `README.md` files open in `gfm-mode`, other `.md` files in
@@ -50,6 +88,7 @@ markers become bullets, `**` disappears, links show only their text.
 -   **`C-c n` / `C-c p` / `C-c u`:** next / previous / parent heading
 -   **`C-c N`:** toggle narrow to subtree
 -   **`C-c '`:** edit code block in its own buffer
+-   **`C-c C-o`:** follow link at point; `M-,` jumps back
 -   **`C-c C-e`:** `markdown-do`: follow link, toggle checkbox, etc. at point
 
 ## EGLOT-JAVA

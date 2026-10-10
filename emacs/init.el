@@ -311,11 +311,14 @@ With universal argument ARG, use current configuration."
              (mxns/nav-mode nil "nav"))))
 
 
-(use-package xref
-  :bind (("C-c <left>"  . xref-go-back)
-         ("C-c <right>" . xref-go-forward)
-         ("C-c b"  . xref-go-back)
-         ("C-c f" . xref-go-forward)))
+;; Following links in org and markdown doesn't touch the xref stack, so
+;; xref-go-back (M-,) can't return from them. Push point first so it can.
+(defun mxns/push-xref-marker (&rest _)
+  "Save point on the xref stack so `xref-go-back' returns here after following a link."
+  (xref-push-marker-stack))
+
+(advice-add 'markdown-follow-thing-at-point :before #'mxns/push-xref-marker)
+(advice-add 'org-open-at-point :before #'mxns/push-xref-marker)
 
 
 (use-package display-line-numbers
@@ -657,8 +660,9 @@ A non-empty display string gives point somewhere to rest."
         (setq-default markdown-hide-markup t)
   :bind (:map markdown-mode-map
               ("C-c C-e" . markdown-do)
-              ;; Mirror my custom org nav keys (folding, C-c C-n/p/f/b/u and
-              ;; the M-<arrows> already match org in markdown-mode by default).
+              ;; Mirror my custom org nav keys (folding and C-c C-n/p/f/b/u
+              ;; already match org by default; promote/demote/move are on
+              ;; C-c <arrows>, not org's M-<arrows>).
               ("C-c n" . markdown-outline-next)
               ("C-c p" . markdown-outline-previous)
               ("C-c u" . markdown-outline-up)
