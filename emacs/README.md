@@ -14,6 +14,18 @@
 
 -   **`describe-keymap`:** list a whole keymap, e.g. `mxns/project-prefix-map`
 
+#### Useful tricks
+
+-   **`consult-theme`:** switch theme
+-   **`consult-buffer`:** recent files and buffers
+-   `yank-from-kill-ring` while in minibuffer
+    1.  Type `C-y` to yank the most recent kill (paste).
+    2.  Press `M-y` (Alt + y) to cycle through the kill ring.
+-   **`dired-jump`:** open dired buffer corresponding to current buffer
+-   **`embark-act`:** use while in minibuffer with `C-.`
+-   **`transpose-frame`:** transpose the frame layout
+-   **`M-q`:** runs `fill-paragraph`, which re-wraps the current paragraph to fit within `fill-column` (default 70, often set higher)
+
 ## PROSECCO
 
 Manage your projects. Find the menu under `C-c p`.
@@ -140,18 +152,6 @@ results: `#defun -g *.el#hook`.
 
 `C-; e` (embark-export) the ripgrep hits into a grep buffer, `e` to
 edit in place (wgrep), `C-c C-c` to apply, `C-x s` to save.
-
-## USEFUL TRICKS
-
--   **`consult-theme`:** switch theme
--   **`consult-buffer`:** recent files and buffers
--   `yank-from-kill-ring` while in minibuffer
-    1.  Type `C-y` to yank the most recent kill (paste).
-    2.  Press `M-y` (Alt + y) to cycle through the kill ring.
--   **`dired-jump`:** open dired buffer corresponding to current buffer
--   **`embark-act`:** use while in minibuffer with `C-.`
--   **`transpose-frame`:** transpose the frame layout
--   **`M-q`:** runs `fill-paragraph`, which re-wraps the current paragraph to fit within `fill-column` (default 70, often set higher)
 
 ## TROUBLESHOOTING
 
