@@ -154,6 +154,18 @@ org-reminders Android app.
 `org-save-all-org-buffers` (`s` in the agenda) commits all of `~/org/`
 as one commit. Commits only, never pushes.
 
+## markdown
+
+`README.md` files open in `gfm-mode`, other `.md` files in
+`markdown-mode`. Markup is hidden by default: heading `#`s and list
+markers become bullets, `**` disappears, links show only their text.
+
+-   **`C-c C-x C-m`:** toggle markup hiding
+-   **`C-c n` / `C-c p` / `C-c u`:** next / previous / parent heading
+-   **`C-c N`:** toggle narrow to subtree
+-   **`C-c '`:** edit code block in its own buffer
+-   **`C-c C-e`:** `markdown-do`: follow link, toggle checkbox, etc. at point
+
 ## Find stuff
 
 `C-x p g` ripgrep, `C-x p f` fd. `C-c p` works too, except in org and

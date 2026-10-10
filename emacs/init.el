@@ -627,11 +627,34 @@ With universal argument ARG, use current configuration."
       (widen)
     (markdown-narrow-to-subtree)))
 
+(defun mxns/markdown-heading-bullets (orig last)
+  "Show hidden atx heading markers as bullets, like org-modern.
+markdown-mode hides `# ' with an empty display string, and the command
+loop moves point off empty display strings, so point can't stay at the
+start of a heading line (C-a and TAB land at the end of the line above).
+A non-empty display string gives point somewhere to rest."
+  (let ((found (funcall orig last)))
+    (when (and found markdown-hide-markup (match-beginning 4))
+      (let* ((bullets "◎○✳")
+             (beg (match-beginning 4))
+             (level (- (save-excursion (goto-char beg)
+                                       (skip-chars-forward "#")
+                                       (point))
+                       beg)))
+        (put-text-property
+         beg (match-end 4) 'display
+         (concat (string (aref bullets (mod (1- level) (length bullets)))) " "))))
+    found))
+
 (use-package markdown-mode
   :ensure t
+  :config (advice-add 'markdown-fontify-headings :around #'mxns/markdown-heading-bullets)
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "/opt/homebrew/bin/pandoc"
               markdown-fontify-code-blocks-natively t)
+        ;; Open with markup hidden (C-c C-x C-m toggles). The variable is
+        ;; buffer-local, so set the default rather than setq.
+        (setq-default markdown-hide-markup t)
   :bind (:map markdown-mode-map
               ("C-c C-e" . markdown-do)
               ;; Mirror my custom org nav keys (folding, C-c C-n/p/f/b/u and
