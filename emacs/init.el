@@ -67,12 +67,15 @@
   (load custom-file 'noerror 'nomessage))
 ;; (load (expand-file-name "init-nav" user-emacs-directory))
 
-;; Fonts. Menlo for code/UI (fixed-pitch), Charter for prose/headings
+;; Fonts. JetBrains Mono for code/UI (fixed-pitch), Nunito for prose/headings
 ;; (variable-pitch). set-face-attribute applies to all current and future
 ;; frames, so this works under emacsclient/daemon too.
+;; Only `default' gets an absolute height; the others are relative (floats) so
+;; text-scale-adjust (C-x C-+, s-+), which only remaps `default', scales them
+;; too — including org headings, whose heights are multiples of variable-pitch.
 (set-face-attribute 'default        nil :family "JetBrains Mono" :height 140)
-(set-face-attribute 'fixed-pitch    nil :family "JetBrains Mono" :height 140)
-(set-face-attribute 'variable-pitch nil :family "Nunito"         :height 160)
+(set-face-attribute 'fixed-pitch    nil :family "JetBrains Mono" :height 1.0)
+(set-face-attribute 'variable-pitch nil :family "Nunito"         :height 1.15)
 (setq-default line-spacing 0.2)
 
 ;; Modus themes ship with Emacs as loadable themes (in etc/themes), but the
