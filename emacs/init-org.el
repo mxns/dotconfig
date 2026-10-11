@@ -68,6 +68,9 @@ to it (base date plus or minus a fixed number of days)."
         org-capture-templates
         '(("t" "Todo" entry (file "~/org/inbox.org")
            "* TODO %?\n  %U")
+          ;; %^t prompts for the date up front; add a time ("fri 14:00") to include one.
+          ("s" "Scheduled todo" entry (file "~/org/inbox.org")
+           "* TODO %?\nSCHEDULED: %^t\n  %U")
           ("b" "Bookmark" entry (file "~/org/inbox.org")
            "* TODO %?\n  %U\n  %a")
           ("n" "Note" entry (file "~/org/inbox.org")
