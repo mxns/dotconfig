@@ -110,8 +110,22 @@ to it (base date plus or minus a fixed number of days)."
         '((agenda . " %i %-14:c%?-12t% s")
           (todo   . " %i %-14:c")
           (tags   . " %i %-14:c")
-          (search . " %i %-14:c")))
+          (search . " %i %-14:c"))
+        ;; C-c a d: every scheduled TODO, earliest first, with its date.
+        org-agenda-custom-commands
+        '(("d" "Scheduled TODOs by date" todo ""
+           ((org-agenda-overriding-header "Scheduled TODOs")
+            (org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))
+            (org-agenda-sorting-strategy '(scheduled-up priority-down))
+            (org-agenda-prefix-format " %(mxns/org-agenda-scheduled-date)  %-14:c")))))
   )
+
+(defun mxns/org-agenda-scheduled-date ()
+  "Scheduled date of the entry at point, for `org-agenda-prefix-format'."
+  (let ((stamp (org-entry-get nil "SCHEDULED")))
+    (if stamp
+        (format-time-string "%Y-%m-%d %a" (org-time-string-to-time stamp))
+      "")))
 
 ;; Proportional font for prose. mixed-pitch is smarter than variable-pitch-mode:
 ;; it keeps code blocks, tables, timestamps, etc. monospace (via
