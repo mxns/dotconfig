@@ -26,7 +26,15 @@ continuum automatically restores the last saved state. No manual step.
 -   **`C-a z`:** zoom current window
 -   **`C-a o`:** go to other window
 -   **`C-a C-o`:** rotate windows
+-   **`C-a [`:** enter copy-mode (emacs keys, `Escape` to exit)
+-   **`C-a I`:** install plugins (TPM)
+-   **`C-a U`:** update plugins (TPM)
 
 ```shell
 tmux kill-server
+tmux ls                                    # list sessions
+tmux a -t <name>                           # attach to a session
+tmux new -s <name>                         # new named session
+tmux kill-session -t <name>                # kill one session, not the whole server
+tmux source-file ~/.config/tmux/tmux.conf  # reload config without restarting
 ```
