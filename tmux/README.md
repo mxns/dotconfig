@@ -17,20 +17,22 @@ continuum automatically restores the last saved state. No manual step.
 
 ### Manual control
 
--   **`C-a C-s`:** save now
--   **`C-a C-r`:** restore now
+   -   **`C-a C-s`:** save now
+   -   **`C-a C-r`:** restore now
 
 ## Useful commands
 
--   **`C-a SPC`:** cycle through window layouts
--   **`C-a z`:** zoom current window
--   **`C-a o`:** go to other window
--   **`C-a C-o`:** rotate windows
--   **`C-a [`:** enter copy-mode (emacs keys, `Escape` to exit)
--   **`C-a I`:** install plugins (TPM)
--   **`C-a U`:** update plugins (TPM)
+### Prefix commands
+   -   `C-a M-v`: enter `copy-mode`
+   -   **`C-a SPC`:** cycle through window layouts
+   -   **`C-a z`:** zoom current window
+   -   **`C-a o`:** go to other window
+   -   **`C-a C-o`:** rotate windows
+   -   **`C-a [`:** enter copy-mode (emacs keys, `Escape` to exit)
+   -   **`C-a I`:** install plugins (TPM)
+   -   **`C-a U`:** update plugins (TPM)
 
-```shell
+### Server  commands
 tmux kill-server
 tmux ls                                    # list sessions
 tmux a -t <name>                           # attach to a session
