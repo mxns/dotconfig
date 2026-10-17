@@ -3,56 +3,51 @@
 ## GENERAL
 
 #### Maintenance
-
--   **`package-refresh-contents`:** refresh the archive listings so the latest versions are visible
--   **`package-upgrade-all`:** bring everything to mutually compatible versions
--   **`package-install-upgrade-built-in`:** ensures that built-in packages are upgraded
--   **`package-autoremove`:** remove orphaned dependencies
--   **`native-compile-prune-cache`:** delete stale `.eln` files from old Emacs/package versions
+   * `package-refresh-contents`: refresh the archive listings so the latest versions are visible
+   * `package-upgrade-all`: bring everything to mutually compatible versions
+   * `package-install-upgrade-built-in`: ensures that built-in packages are upgraded
+   * `package-autoremove`: remove orphaned dependencies
+   * `native-compile-prune-cache`: delete stale `.eln` files from old Emacs/package versions
 
 #### Help
+   * `info-display-manual`: RTFM. Use `Info-goto-node` to navigate
+   * `describe-keymap`: list a whole keymap, e.g. `mxns/project-prefix-map`
 
--   **`describe-keymap`:** list a whole keymap, e.g. `mxns/project-prefix-map`
+#### Navigation
+   * `M-,` `M-C-,`: xref forward/backward
 
 #### Useful tricks
-
--   **`consult-theme`:** switch theme
--   **`consult-buffer`:** recent files and buffers
--   `yank-from-kill-ring` while in minibuffer
-    1.  Type `C-y` to yank the most recent kill (paste).
-    2.  Press `M-y` (Alt + y) to cycle through the kill ring.
--   **`dired-jump`:** open dired buffer corresponding to current buffer
--   **`embark-act`:** use while in minibuffer with `C-.`
--   **`transpose-frame`:** transpose the frame layout
--   **`M-q`:** runs `fill-paragraph`, which re-wraps the current paragraph to fit within `fill-column` (default 70, often set higher)
+   * `consult-theme`: switch theme
+   * `consult-buffer`: recent files and buffers
+   * `yank-from-kill-ring` while in minibuffer
+     1.  Type `C-y` to yank the most recent kill (paste).
+     2.  Press `M-y` (Alt + y) to cycle through the kill ring.
+   * `dired-jump`: open dired buffer corresponding to current buffer
+   * `embark-act`: use while in minibuffer with `C-.`
+   * `transpose-frame`: transpose the frame layout
+   * `M-q`: runs `fill-paragraph`, which re-wraps the current paragraph to fit within `fill-column` (default 70, often set higher)
 
 ## PROSECCO
 
 Manage your projects. Find the menu under `C-c p`.
-
-This minor mode hijacks the standard `C-x b` keybinding to switch
-between buffers: it will show only buffers that belong to the current
-project, plus any buffers that do not belong to any project. Use the
-universal argument to retain the standard behavior of the keybinding.
-
--   **`project-forget-project`:** forget projects when the list is getting too long
+   * `project-forget-project`: forget projects when the list is getting too long
 
 ## ORG
 
 Everything lives in `~/org/` (own git repo); captures land in `inbox.org`.
-
--   **`C-c c`:** capture
--   **`C-c a`:** agenda
--   **`C-c o`:** `t` todo, `s` schedule, `d` deadline, `r` refile, `a` archive, `m` reminder
--   **`C-c n` / `C-c p`:** next / previous heading
--   **`C-c C-f` / `C-c C-b`:** next / previous heading on the same level
--   **`C-c u`:** parent heading
--   **`C-c N`:** toggle narrow to subtree
--   **`M-RET`:** new heading below; at line start: above; mid-title: splits; on text: turns it into a heading
--   **`C-<return>`:** new heading after the subtree; `C-u C-u M-RET` after the parent's
--   **`M-S-<return>` / `C-S-<return>`:** same, as TODO
--   **`C-c *`:** toggle line between heading and text
--   **`RET` / `C-c C-o`:** follow link at point; `M-,` or `C-c &` jumps back
+   * `C-c c`: capture
+   * `C-c a`: agenda
+   * `C-c o`: `t` todo, `s` schedule, `d` deadline, `r` refile, `a` archive, `m` reminder
+   * `C-c n` / `C-c p`: next / previous heading
+   * `C-c C-f` / `C-c C-b`: next / previous heading on the same level
+   * `C-c u`: parent heading
+   * `C-c N`: toggle narrow to subtree
+   * `M-RET`: new heading below; at line start: above; mid-title: splits; on text: turns it into a heading
+   * `C-<return>`: new heading after the subtree; `C-u C-u M-RET` after the parent's
+   * `M-S-<return>` / `C-S-<return>`: same, as TODO
+   * `C-c *`: toggle line between heading and text
+   * `RET` / `C-c C-o`: follow link at point; `M-,` or `C-c &` jumps back
+   * `M-x font-lock-mode`: show markup
 
 ### Reminders
 
@@ -68,20 +63,18 @@ as one commit. Commits only, never pushes.
 ### Babel
 
 Languages: elisp, python, R, shell. No confirmation before running.
-
--   **`C-c C-,`:** insert block (`s` for src)
--   **`C-c C-c`:** run block; output lands under `#+RESULTS:`
--   **`C-c '`:** edit block in its language's mode
--   **`C-c C-v t`:** tangle to files; `C-c C-v C-h` lists all `C-c C-v` commands
+   * `C-c C-,`: insert block (`s` for src)
+   * `C-c C-c`: run block; output lands under `#+RESULTS:`
+   * `C-c '`: edit block in its language's mode
+   * `C-c C-v t`: tangle to files; `C-c C-v C-h` lists all `C-c C-v` commands
 
 Header args, after the language: `#+begin_src python :session :results output`
-
--   **`:results output`:** what was printed (default `value`: what was returned)
--   **`:session`:** shared interpreter across blocks
--   **`:var x=name`:** input from a named block or table
--   **`:tangle file.py`:** target for tangling
--   **`:dir /ssh:host:`:** run elsewhere
--   file-wide: `#+PROPERTY: header-args:python :session :results output`
+   * `:results output`: what was printed (default `value`: what was returned)
+   * `:session`: shared interpreter across blocks
+   * `:var x=name`: input from a named block or table
+   * `:tangle file.py`: target for tangling
+   * `:dir /ssh:host:`: run elsewhere
+   * file-wide: `#+PROPERTY: header-args:python :session :results output`
 
 Literate programming: the org file is the source, code files are generated.
 
@@ -95,13 +88,13 @@ Literate programming: the org file is the source, code files are generated.
 `README.md` files open in `gfm-mode`, other `.md` files in
 `markdown-mode`. Markup is hidden by default: heading `#`s and list
 markers become bullets, `**` disappears, links show only their text.
-
--   **`C-c C-x C-m`:** toggle markup hiding
--   **`C-c n` / `C-c p` / `C-c u`:** next / previous / parent heading
--   **`C-c N`:** toggle narrow to subtree
--   **`C-c '`:** edit code block in its own buffer
--   **`C-c C-o`:** follow link at point; `M-,` jumps back
--   **`C-c C-e`:** `markdown-do`: follow link, toggle checkbox, etc. at point
+   * `C-c C-d`: do something sensible
+   * `C-c C-x C-m`: toggle markup hiding
+   * `C-c n` / `C-c p` / `C-c u`: next / previous / parent heading
+   * `C-c N`: toggle narrow to subtree
+   * `C-c '`: edit code block in its own buffer
+   * `C-c C-o`: follow link at point; `M-,` jumps back
+   * `C-c C-e`: `markdown-do`: follow link, toggle checkbox, etc. at point
 
 ## EGLOT-JAVA
 
@@ -133,20 +126,18 @@ command, no shell quoting. Lead with `#` to add a local filter on the
 results: `#defun -g *.el#hook`.
 
 ### consult-ripgrep
-
--   **`-g some_dir/**/*.json`:** limit to glob, repeatable; `-g !*.min.js` excludes
--   **`-t py` / `-T py`:** only / skip a file type (`rg --type-list`)
--   **`-uu`:** include ignored and hidden files (`-u` is ignored only)
--   **`-F` / `-w`:** literal string / whole words
--   smart case: all lowercase ignores case
+   * `-g some_dir/**/*.json`: limit to glob, repeatable; `-g !*.min.js` excludes
+   * `-t py` / `-T py`: only / skip a file type (`rg --type-list`)
+   * `-uu`: include ignored and hidden files (`-u` is ignored only)
+   * `-F` / `-w`: literal string / whole words
+   * smart case: all lowercase ignores case
 
 ### consult-fd
-
--   **`some_dir/**/*.json -g`:** input is a glob, matched against the full path
--   **`-e json`:** by extension
--   **`-t f` / `-t d`:** files / directories only
--   **`-E node_modules`:** exclude
--   **`-u`:** include ignored and hidden files
+   * `some_dir/**/*.json -g`: input is a glob, matched against the full path
+   * `-e json`: by extension
+   * `-t f` / `-t d`: files / directories only
+   * `-E node_modules`: exclude
+   * `-u`: include ignored and hidden files
 
 ### Edit across files
 
@@ -157,28 +148,28 @@ edit in place (wgrep), `C-c C-c` to apply, `C-x s` to save.
 
 ### When packages starts to fail
 
-Odd breakage after an update usually means a package and its dependencies
-are on incompatible versions. The quick fix to realign them:
+Odd breakage after an update usually means a package and its
+dependencies are on incompatible versions. The quick fix to realign
+them:
+   * `package-upgrade-all`: bring everything to mutually compatible versions
+   * **restart Emacs:** the running session still holds the old definitions in memory
 
--   **`package-upgrade-all`:** bring everything to mutually compatible versions
--   **restart Emacs:** the running session still holds the old definitions in memory
-
-If that doesn't help, or if you want to be more specific, here are some other things to try:
-
--   **`toggle-debug-on-error`:** show a backtrace so you can see which package is at fault
--   **`package-refresh-contents`:** refresh the archive listings so the latest versions are visible
--   **`package-reinstall`:** reinstall the offending package against the current dependencies
--   **`byte-recompile-directory` or `package-recompile-all`:** rebuild stale `.elc` files left over from the old version
+If that doesn't help, or if you want to be more specific, here are
+some other things to try:
+   * `toggle-debug-on-error`: show a backtrace so you can see which package is at fault
+   * `package-refresh-contents`: refresh the archive listings so the latest versions are visible
+   * `package-reinstall`: reinstall the offending package against the current dependencies
+   * `byte-recompile-directory` or `package-recompile-all`: rebuild stale `.elc` files left over from the old version
 
 ### When a single function starts to fail
 
-If one specific command starts erroring (especially with `wrong-number-of-arguments`
-or a missing prompt), suspect advice before the function itself. List it with
-`M-x describe-function` (the "This function has :around/:after advice" note), then
-strip the advice and retry:
-
--   **`advice-mapc` + `advice-remove`:** temporarily remove all advice from the symbol and see if the error disappears
--   **if it does:** one of the advices is the culprit; re-add them one at a time to find which
+If one specific command starts erroring (especially with
+`wrong-number-of-arguments` or a missing prompt), suspect advice before
+the function itself. List it with `M-x describe-function` (the "This
+function has :around/:after advice" note), then strip the advice and
+retry:
+   * `advice-mapc` + `advice-remove`: temporarily remove all advice from the symbol and see if the error disappears
+   * **if it does**: one of the advices is the culprit; re-add them one at a time to find which
 
 A common trap: adding an **interactive** command as advice. Its interactive form can
 override the original's, so the underlying function runs with the wrong arguments.
@@ -190,7 +181,7 @@ Advice functions should be plain (non-interactive) and accept `&rest` args.
 
 Eenabling `eglot-java-mode` in a Java buffer fails immediately with:
 
-    [eglot] -1: Server died
+[eglot] -1: Server died
     jsonrpc--process-sentinel(... "exited abnormally with code 13")
 
 eglot-java keeps one workspace per project under
