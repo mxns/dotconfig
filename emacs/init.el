@@ -348,6 +348,7 @@ With universal argument ARG, use current configuration."
   (setq undo-fu-session-mode-hook-allow-list
         '(text-mode-hook
           org-mode-hook
+          markdown-mode-hook
           prog-mode-hook
           conf-mode-hook))
   

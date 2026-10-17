@@ -62,7 +62,6 @@ org-reminders Android app.
 `org-save-all-org-buffers` (`s` in the agenda) commits all of `~/org/`
 as one commit. Commits only, never pushes.
 
-
 #### Babel
 
 Languages: elisp, python, R, shell. No confirmation before running.
