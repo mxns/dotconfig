@@ -36,16 +36,28 @@
   ;; Keep JDT from indexing build output (target/, build/). Indexing
   ;; volatile, frequently-deleted build artifacts is what corrupts the
   ;; per-project workspace cache and makes the server die with exit 13.
-  (setq-default eglot-workspace-configuration
-                '(:java (:import (:exclusions ["**/node_modules/**"
-                                               "**/.git/**"
-                                               "**/target/**"
-                                               "**/build/**"]))))
+  (setq-default eglot-workspace-configuration #'mxns/eglot-workspace-configuration)
 
   ;; Use custom server commands if needed
   ;; (add-to-list 'eglot-server-programs
   ;;              '(java-mode . ("jdtls")))
   )
+
+;; pylsp runs on Homebrew's Python, so by default jedi and mypy only see
+;; that interpreter's packages. Point both at the nearest .venv above the
+;; file instead. Called by eglot with `default-directory' set to the
+;; file's directory (or the project root).
+(defun mxns/eglot-workspace-configuration (_server)
+  "Workspace configuration for eglot, with pylsp using the nearest .venv."
+  (let* ((root (locate-dominating-file default-directory ".venv"))
+         (python (and root (expand-file-name ".venv/bin/python" root))))
+    `(:java (:import (:exclusions ["**/node_modules/**"
+                                   "**/.git/**"
+                                   "**/target/**"
+                                   "**/build/**"]))
+      ,@(when (and python (file-executable-p python))
+          `(:pylsp (:plugins (:jedi (:environment ,python)
+                              :pylsp_mypy (:overrides ["--python-executable" ,python t]))))))))
 
 ;; macOS kqueue uses one file descriptor per watched directory, and the
 ;; per-process limit (~256) is far smaller than the number of dirs in a
