@@ -35,32 +35,35 @@ Manage your projects. Find the menu under `C-c p`.
 ## ORG
 
 Everything lives in `~/org/` (own git repo); captures land in `inbox.org`.
+
+#### Agenda
    * `C-c c`: capture
    * `C-c a`: agenda
    * `C-c o`: `t` todo, `s` schedule, `d` deadline, `r` refile, `a` archive, `m` reminder
+   * `M-RET`: new heading below; at line start: above; mid-title: splits; on text: turns it into a heading
+   * `C-<return>`: new heading after the subtree; `C-u C-u M-RET` after the parent's
+   * `M-S-<return>` / `C-S-<return>`: same, as TODO
+
+#### Navigation   
    * `C-c n` / `C-c p`: next / previous heading
    * `C-c C-f` / `C-c C-b`: next / previous heading on the same level
    * `C-c u`: parent heading
    * `C-c N`: toggle narrow to subtree
-   * `M-RET`: new heading below; at line start: above; mid-title: splits; on text: turns it into a heading
-   * `C-<return>`: new heading after the subtree; `C-u C-u M-RET` after the parent's
-   * `M-S-<return>` / `C-S-<return>`: same, as TODO
-   * `C-c *`: toggle line between heading and text
-   * `RET` / `C-c C-o`: follow link at point; `M-,` or `C-c &` jumps back
-   * `M-x font-lock-mode`: show markup
+   * `RET` / `C-c C-o`: follow link at point; `M-,` or `C-c &` jumps 
 
-### Reminders
+#### Reminders
 
 `C-c o m` sets a `REMIND` timestamp (defaults to SCHEDULED, must have a
 time); `C-u` to remove. Works in the agenda too. Picked up by the
 org-reminders Android app.
 
-### Auto-commit
+#### Auto-commit
 
 `org-save-all-org-buffers` (`s` in the agenda) commits all of `~/org/`
 as one commit. Commits only, never pushes.
 
-### Babel
+
+#### Babel
 
 Languages: elisp, python, R, shell. No confirmation before running.
    * `C-c C-,`: insert block (`s` for src)
@@ -82,6 +85,15 @@ Literate programming: the org file is the source, code files are generated.
 2.  develop with `C-c C-c`, tangle with `C-c C-v t` (or on save)
 3.  `:noweb yes` + `<<name>>` assembles blocks in any order
 4.  edit only the org; `:comments link` + `org-babel-tangle-jump-to-org` gets back from generated code
+
+
+
+#### Various
+   * `M-x font-lock-mode`: show or hide markup
+   * `M-x org-modern-mode`: bullets, tag boxes, table prettification
+   * `M-x visible-mode`: invisible text (link brackets, emphasis markers)
+   * `M-x org-toggle-link-display`: toggle links between pretty and raw
+   * `M-x org-indent-mode`: virtual indentation
 
 ## MARKDOWN
 
