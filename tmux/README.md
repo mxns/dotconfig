@@ -23,6 +23,7 @@ continuum automatically restores the last saved state. No manual step.
 ## Useful commands
 
 ### Prefix commands
+
    -   `C-a M-v`: enter `copy-mode`
    -   **`C-a SPC`:** cycle through window layouts
    -   **`C-a z`:** zoom current window
@@ -33,6 +34,8 @@ continuum automatically restores the last saved state. No manual step.
    -   **`C-a U`:** update plugins (TPM)
 
 ### Server  commands
+
+``` shell
 tmux kill-server
 tmux ls                                    # list sessions
 tmux a -t <name>                           # attach to a session
