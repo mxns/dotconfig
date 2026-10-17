@@ -34,6 +34,16 @@ to it (base date plus or minus a fixed number of days)."
     "a" "Archive"
     "m" "Reminder")
 
+(defun mxns/org-babel-python-use-venv ()
+  "Run this org file's Python blocks with the nearest .venv above it, if any.
+Applies to both session and non-session blocks; a :python header arg
+still wins."
+  (when-let* ((file buffer-file-name)
+              (root (locate-dominating-file file ".venv"))
+              (python (expand-file-name ".venv/bin/python" root))
+              ((file-executable-p python)))
+    (setq-local org-babel-python-command python)))
+
 (use-package org
   :ensure nil
   :mode ("\\.org\\'" . org-mode)
@@ -54,6 +64,9 @@ to it (base date plus or minus a fixed number of days)."
      (python . t)
      (R . t)
      (shell . t)))
+  ;; Default is "python", which Homebrew doesn't provide (only python3).
+  (setq org-babel-python-command-nonsession "python3")
+  (add-hook 'org-mode-hook #'mxns/org-babel-python-use-venv)
   (setq org-use-fast-todo-selection t  ; single-letter TODO state selection, shows the mapping popup
         org-agenda-files '("~/org/")
         org-confirm-babel-evaluate nil
