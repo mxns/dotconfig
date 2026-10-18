@@ -75,7 +75,7 @@
 ;; too — including org headings, whose heights are multiples of variable-pitch.
 (set-face-attribute 'default        nil :family "JetBrains Mono" :height 140)
 (set-face-attribute 'fixed-pitch    nil :family "JetBrains Mono" :height 1.0)
-(set-face-attribute 'variable-pitch nil :family "Nunito"         :height 1.15)
+(set-face-attribute 'variable-pitch nil :family "Nunito"         :height 1.0)
 (setq-default line-spacing 0.2)
 
 ;; Modus themes ship with Emacs as loadable themes (in etc/themes), but the
@@ -622,6 +622,13 @@ With universal argument ARG, use current configuration."
 
 (use-package htmlize
   :ensure t)
+
+
+(use-package auctex
+  :ensure t
+  :init
+  (setq TeX-auto-save t
+        TeX-parse-self t))
 
 
 (defun mxns/markdown-toggle-narrow-to-subtree ()

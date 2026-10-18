@@ -10,13 +10,15 @@
 
 ;;; Code:
 
-;; GUI Emacs (started from Dock/Spotlight/launchd, not a shell) does not
-;; inherit PATH from shell rc files, so Homebrew's `pass'/`gpg' may not
-;; resolve. Add the Homebrew bin dirs directly rather than spawning a
-;; shell to scrape the environment (e.g. exec-path-from-shell) -- that
-;; shells out to an interactive login shell, which re-runs .bashrc/.zshrc
-;; and hangs Emacs startup solid if anything in there blocks or waits on
-;; a tty.
+;; The emacsformacosx.com build's launcher (Contents/MacOS/launch.rs)
+;; already runs `$SHELL --login' when started from Dock/Finder and
+;; passes that environment on, so PATH normally includes path_helper
+;; dirs and anything set in .bash_profile -- making this a no-op. Other
+;; GUI builds don't, so Homebrew's `pass'/`gpg' may not resolve there.
+;; Add the Homebrew bin dirs directly rather than spawning a shell to
+;; scrape the environment (e.g. exec-path-from-shell) -- an interactive
+;; shell re-runs .bashrc/.zshrc and hangs Emacs startup solid if
+;; anything in there blocks or waits on a tty.
 (when (memq window-system '(mac ns))
   (dolist (dir '("/opt/homebrew/bin" "/opt/homebrew/sbin"))
     (when (and (file-directory-p dir) (not (member dir exec-path)))

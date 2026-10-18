@@ -136,6 +136,27 @@ still wins."
             (org-agenda-prefix-format " %(mxns/org-agenda-scheduled-date)  %-14:c")))))
   )
 
+;; LaTeX fragment previews (C-c C-x C-l). They're images rendered once at a
+;; fixed size, so bump the base size and re-render on `text-scale-adjust'.
+;; SVG (dvisvgm, ships with MacTeX) stays crisp on Retina; PNG is the fallback.
+(with-eval-after-load 'org
+  (setq org-preview-latex-default-process
+        (if (image-type-available-p 'svg) 'dvisvgm 'dvipng))
+  (plist-put org-format-latex-options :scale 1.1))
+
+(defun mxns/org-latex-preview-rescale ()
+  "Re-render this buffer's LaTeX previews to match the text scale."
+  (when (and (derived-mode-p 'org-mode)
+             (seq-some (lambda (o) (eq (overlay-get o 'org-overlay-type) 'org-latex-overlay))
+                       (overlays-in (point-min) (point-max))))
+    (let ((org-format-latex-options
+           (plist-put (copy-sequence org-format-latex-options) :scale
+                      (* (plist-get org-format-latex-options :scale)
+                         (expt text-scale-mode-step text-scale-mode-amount)))))
+      (org-clear-latex-preview)
+      (org--latex-preview-region (point-min) (point-max)))))
+(add-hook 'text-scale-mode-hook #'mxns/org-latex-preview-rescale)
+
 (defun mxns/org-agenda-scheduled-date ()
   "Scheduled date of the entry at point, for `org-agenda-prefix-format'."
   (let ((stamp (org-entry-get nil "SCHEDULED")))
