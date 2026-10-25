@@ -24,12 +24,11 @@ continuum automatically restores the last saved state. No manual step.
 
 ### Prefix commands
 
-   -   `C-a M-v`: enter `copy-mode`
+   -   `M-v, C-a [`: enter `copy-mode` (`R` for rectangle)
    -   **`C-a SPC`:** cycle through window layouts
    -   **`C-a z`:** zoom current window
    -   **`C-a o`:** go to other window
    -   **`C-a C-o`:** rotate windows
-   -   **`C-a [`:** enter copy-mode (emacs keys, `Escape` to exit)
    -   **`C-a I`:** install plugins (TPM)
    -   **`C-a U`:** update plugins (TPM)
 
