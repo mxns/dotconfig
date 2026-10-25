@@ -657,9 +657,39 @@ A non-empty display string gives point somewhere to rest."
          (concat (string (aref bullets (mod (1- level) (length bullets)))) " "))))
     found))
 
+(defconst mxns/markdown-list-marker-regexp
+  "[[:blank:]]*\\(?:[0-9]+[.)]\\|[-*+]\\)[[:blank:]]+")
+
+(defun mxns/markdown-allow-list-item-fences ()
+  "Recognize ``` fences that open on a list item line, as in \"14. ```sh\".
+CommonMark allows this, but markdown-mode only accepts a fence preceded by
+whitespace, so it took the closing fence for an opener and every block
+after it was inverted."
+  (unless (string-prefix-p "^\\(?:" markdown-regex-gfm-code-block-open)
+    (setq markdown-regex-gfm-code-block-open
+          (concat "^\\(?:" mxns/markdown-list-marker-regexp "\\)?"
+                  (string-remove-prefix "^" markdown-regex-gfm-code-block-open))))
+  ;; The fence table copied the regexp at load time.
+  (setf (caar (nth 2 markdown-fenced-block-pairs))
+        markdown-regex-gfm-code-block-open))
+
+(defun mxns/markdown-show-fence-list-marker (orig last)
+  "Keep the list marker visible on a fence line that hide-markup hides."
+  (let ((found (funcall orig last)))
+    (when found
+      (save-excursion
+        (goto-char (match-beginning 0))
+        (forward-line -1)
+        (when (looking-at mxns/markdown-list-marker-regexp)
+          (remove-text-properties (match-beginning 0) (match-end 0) '(invisible nil))
+          (put-text-property (match-beginning 0) (match-end 0) 'face 'markdown-list-face))))
+    found))
+
 (use-package markdown-mode
   :ensure t
   :config (advice-add 'markdown-fontify-headings :around #'mxns/markdown-heading-bullets)
+          (mxns/markdown-allow-list-item-fences)
+          (advice-add 'markdown-fontify-gfm-code-blocks :around #'mxns/markdown-show-fence-list-marker)
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "/opt/homebrew/bin/pandoc"
               markdown-fontify-code-blocks-natively t)
