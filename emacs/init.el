@@ -506,6 +506,13 @@ With universal argument ARG, use current configuration."
 ;;   (project-switch-commands 'prosecco-switch-project))
 
 
+(use-package project
+  :ensure nil
+  :custom
+  ;; Treat any directory containing PROJECT.md as a project root
+  (project-vc-extra-root-markers '("PROJECT.md")))
+
+
 (use-package prosecco
   :load-path "~/devel/mxns/prosecco/"
   :demand t
