@@ -1,14 +1,20 @@
 *.bak
 emacs/auto-save-list
 emacs/aux
+emacs/bookmarks
 emacs/eglot-java-eclipse-jdt-cache
+emacs/eln-cache
 emacs/elpa
+emacs/eshell
 emacs/history
+emacs/image-dired
 emacs/projects
 emacs/recentf
 emacs/share
+emacs/tramp
 emacs/transient
 emacs/tree-sitter
+emacs/url
 emacs/vimish-fold
 gcloud
 gh
@@ -20,3 +26,4 @@ jgit
 nx
 tmux/plugins
 *~
+.DS_Store
