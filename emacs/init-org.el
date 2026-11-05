@@ -103,6 +103,8 @@ still wins."
         org-startup-indented t          ; indent tree, hide leading stars
         org-hide-emphasis-markers t     ; show *bold* as bold, not with markers
         org-pretty-entities t           ; render \alpha, sub/superscripts, etc.
+        org-use-sub-superscripts '{}    ; only a_{b} is a subscript, not my_var
+        org-export-with-sub-superscripts '{}
         org-ellipsis "…"
         ;; Agenda view
         org-agenda-window-setup 'current-window
