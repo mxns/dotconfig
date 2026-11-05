@@ -524,9 +524,33 @@ With universal argument ARG, use current configuration."
   (prosecco-mode 1))
 
 
+(defvar magit-process-connection-type)
+(defvar magit-tramp-pipe-stty-settings)
+
+(defun mxns/magit-tramp-darwin-pipe (fn program &optional input &rest args)
+  "Call FN so that PROGRAM's command line reaches a macOS remote intact.
+Tramp types the command into a remote tty.  In canonical mode macOS caps
+a line at 1024 bytes (MAX_CANON) and `with-editor' repeats its sleeping
+editor enough to exceed that, so the remote shell waits forever and git
+never starts.  Using a pipe makes Tramp run \"stty -icanon\" first.
+
+Processes fed INPUT keep Magit's defaults: they need canonical mode to
+see EOF.  The stty value must block (min 1), a timeout would make
+password prompts read an empty line."
+  (if (and (not input)
+           (file-remote-p default-directory)
+           (tramp-check-remote-uname
+            (tramp-dissect-file-name default-directory) "Darwin"))
+      (let ((magit-process-connection-type nil)
+            (magit-tramp-pipe-stty-settings "-icanon min 1 time 0"))
+        (apply fn program input args))
+    (apply fn program input args)))
+
 (use-package magit
   :bind-keymap
-  ("C-c m" . mxns/magit-prefix-map))
+  ("C-c m" . mxns/magit-prefix-map)
+  :config
+  (advice-add 'magit-start-process :around #'mxns/magit-tramp-darwin-pipe))
 
 
 (use-package yasnippet
@@ -692,8 +716,21 @@ after it was inverted."
           (put-text-property (match-beginning 0) (match-end 0) 'face 'markdown-list-face))))
     found))
 
+(defun mxns/markdown-unhide-table-markup (last)
+  "Font-lock matcher that keeps markup visible on table lines up to LAST.
+`markdown-table-align' pads cells by their raw width, so hidden backticks,
+emphasis and link URLs made aligned tables look ragged."
+  (while (re-search-forward markdown-table-line-regexp last t)
+    (remove-text-properties (line-beginning-position) (line-end-position)
+                            '(invisible nil)))
+  nil)
+
+(defun mxns/markdown-add-table-keywords ()
+  (font-lock-add-keywords nil '((mxns/markdown-unhide-table-markup)) 'append))
+
 (use-package markdown-mode
   :ensure t
+  :hook (markdown-mode . mxns/markdown-add-table-keywords)
   :config (advice-add 'markdown-fontify-headings :around #'mxns/markdown-heading-bullets)
           (mxns/markdown-allow-list-item-fences)
           (advice-add 'markdown-fontify-gfm-code-blocks :around #'mxns/markdown-show-fence-list-marker)
