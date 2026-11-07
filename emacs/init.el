@@ -513,6 +513,16 @@ With universal argument ARG, use current configuration."
   (project-vc-extra-root-markers '("PROJECT.md")))
 
 
+(defun mxns/project-buffers-no-connect (fn project)
+  "Call FN on PROJECT without reopening closed Tramp connections.
+`project-buffers' expands the `default-directory' of every buffer.  After
+a Tramp session ends, the hidden \" *code-conversion-work*\" buffer can
+keep a directory with no local part, and expanding that needs the remote
+home, so listing local buffers would reconnect and prompt for a password.
+Live connections are unaffected."
+  (let ((non-essential t))
+    (funcall fn project)))
+
 (use-package prosecco
   :load-path "~/devel/mxns/prosecco/"
   :demand t
@@ -521,6 +531,7 @@ With universal argument ARG, use current configuration."
   ("C-c p" . mxns/project-prefix-map)
   :config
   (keymap-set prosecco-mode-map "C-x p" mxns/project-prefix-map)
+  (advice-add 'project-buffers :around #'mxns/project-buffers-no-connect)
   (prosecco-mode 1))
 
 
