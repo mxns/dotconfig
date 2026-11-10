@@ -34,7 +34,28 @@
   (setq neo-autorefresh t)
   (setq neo-theme 'arrow)
   (setq neo-smart-open t)
+  ;; The `neotree' mode line lists the directory on every redisplay.  For
+  ;; a remote tree whose Tramp session has ended, that means a password
+  ;; prompt inside redisplay, which freezes Emacs (C-g can't interrupt it).
+  (setq neo-mode-line-type 'default)
   (setq neo-window-width 30)
+
+  (defun mxns/neotree-disconnected-p (file)
+    "Non-nil if FILE is remote and its Tramp connection is closed."
+    (and file (file-remote-p file) (not (file-remote-p file nil t))))
+
+  (defun mxns/neotree-autorefresh-when-connected (fn)
+    "Call FN, NeoTree's idle refresh, unless it would need a closed connection.
+Background code can't reconnect (see `mxns/tramp-reconnect-only-in-commands'),
+so refreshing would only log an error after every idle period."
+    (unless (or (mxns/neotree-disconnected-p (buffer-file-name))
+                (and (neo-global--window-exists-p)
+                     (mxns/neotree-disconnected-p
+                      (buffer-local-value 'neo-buffer--start-node
+                                          (neo-global--get-buffer)))))
+      (funcall fn)))
+  (advice-add 'neo-global--do-autorefresh
+              :around #'mxns/neotree-autorefresh-when-connected)
 
   (defun mxns/neotree-project-root ()
     "Open neotree at the project root and find current file."

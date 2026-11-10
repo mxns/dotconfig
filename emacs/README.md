@@ -155,6 +155,34 @@ results: `#defun -g *.el#hook`.
 `C-; e` (embark-export) the ripgrep hits into a grep buffer, `e` to
 edit in place (wgrep), `C-c C-c` to apply, `C-x s` to save.
 
+## TRAMP
+
+Open remote files with `C-x C-f` and a remote path.
+   * `/ssh:user@host:/path`: remote file
+   * `/ssh:a|ssh:b:/path`: hop through `a` to reach `b`
+   * `/sudo::/etc/hosts`: local as root; `/ssh:host|sudo:host:/path` remote as root
+   * `tramp-cleanup-all-connections`: when hung or stale
+
+Full hop chains are kept in file names (`tramp-show-ad-hoc-proxies`),
+so recentf and bookmarks reopen them directly.
+
+Unexpected connection or password prompt: `(setq tramp-verbose 10)`,
+reproduce, `C-g`, then read the backtrace in `*debug tramp/...*`. Set
+it back to 3 afterwards. If `C-g` doesn't get through: `sample <pid> 3`
+in a terminal shows where Emacs is stuck.
+
+## BOOKMARKS
+
+Good for long TRAMP paths. Stored in `bookmarks` (not in git).
+   * `C-x r m`: set
+   * `C-x r b`: jump; or `consult-buffer`, `m SPC` to narrow to bookmarks
+   * `C-x r l`: list; `d` mark for deletion, `x` delete, `r` rename
+
+Temporary ones, gone when Emacs quits: registers. Don't use `z`, the
+window zoom toggle uses it.
+   * `C-x r SPC a`: save point in register `a`
+   * `C-x r j a`: jump back
+
 ## TROUBLESHOOTING
 
 ### When packages starts to fail

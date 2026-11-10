@@ -5,6 +5,10 @@
 
 ;;; Code:
 
+;; Start the client locally even from a remote (Tramp) buffer; otherwise
+;; it would run on the remote host and connect to that host's databases.
+(setq sql-default-directory (expand-file-name "~/"))
+
 (setq sql-connection-alist
       '((db-dev (sql-product 'mysql)
                 (sql-server "127.0.0.1")

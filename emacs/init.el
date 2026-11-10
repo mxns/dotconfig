@@ -106,6 +106,22 @@
 
 (setq tramp-show-ad-hoc-proxies t)
 
+(defun mxns/tramp-reconnect-only-in-commands (fn vec)
+  "Call FN on VEC, but only open a new connection from a command.
+Redisplay, timers and process sentinels run with `this-command' nil.
+If one of them touches a remote file after its Tramp session ended,
+reconnecting would ask for a password, and inside redisplay that
+freezes Emacs.  Binding `non-essential' makes Tramp give up instead;
+live connections keep working, and the next command reconnects."
+  (if (or this-command noninteractive)
+      (funcall fn vec)
+    (let ((non-essential t))
+      (funcall fn vec))))
+
+(with-eval-after-load 'tramp-sh
+  (advice-add 'tramp-maybe-open-connection
+              :around #'mxns/tramp-reconnect-only-in-commands))
+
 ;; Decode modifyOtherKeys C-M- sequences (\e[27;7;<keycode>~) sent by Alacritty/tmux
 (defun mxns/setup-terminal-keys ()
   (dolist (ch (string-to-list "abcdefghijklmnopqrstuvwxyz"))
