@@ -471,7 +471,16 @@ With universal argument ARG, use current configuration."
   ;; Marginalia must be activated in the :init section of use-package such that
   ;; the mode gets enabled right away. Note that this forces loading the
   ;; package.
-  (marginalia-mode))
+  (marginalia-mode)
+  :config
+  (defun mxns/marginalia-buffer-file-no-connect (fn buffer)
+    "Call FN on BUFFER without letting Tramp open a connection.
+For a remote dired buffer at ~/, FN would ask the host for its home
+directory, which connects (and hangs if the host is unreachable)."
+    (let ((non-essential t))
+      (funcall fn buffer)))
+  (advice-add 'marginalia--buffer-file :around
+              #'mxns/marginalia-buffer-file-no-connect))
 
 
 (use-package which-key
